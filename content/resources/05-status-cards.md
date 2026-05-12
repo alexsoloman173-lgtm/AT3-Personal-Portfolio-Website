@@ -8,7 +8,7 @@ summary: Formative assessment tool for classroom feedback.
 image: resources/status_cards.png
 image_alt: Status cards resource
 link_url: resources/status_cards.pdf
-link_text: Download PDF â†’
+link_text: Download PDF ->
 link_download: true
 media_image: resources/status_cards.png
 media_download: resources/status_cards.pdf

@@ -8,7 +8,7 @@ summary: Reflective post on an ambitious literacy diagram project that ultimatel
 image: resources/Pasted image 20260429100540.png
 image_alt: Integrated Literacy Diagram showing braided domain capacities and torus activity modes
 link_url: resources/Integrated%20Literacy%20Diagram.pdf
-link_text: Download PDF â†’
+link_text: Download PDF ->
 link_download: true
 media_image: resources/Pasted image 20260429100540.png
 media_download: resources/Integrated%20Literacy%20Diagram.pdf
