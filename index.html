@@ -1,0 +1,2227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Professional Portfolio | EDU1003 AT3</title>
+  <meta name="description" content="Single-page professional portfolio website for EDU1003 AT3." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f2f1ec;
+      --ink: #111111;
+      --muted: #5d5a52;
+      --line: #c6c2b7;
+      --grid-line: #ebe9e3;
+      --accent: #be1e2d;
+      --panel: #f8f7f3;
+      --max: 1160px;
+      --gap: 1.25rem;
+      --ease: 260ms cubic-bezier(.2, .8, .2, 1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+    }
+
+    html {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    html::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 32px 32px;
+      background-position: -1px -1px;
+    }
+
+    a { color: inherit; text-underline-offset: 3px; }
+
+    .shell {
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      padding: 1.2rem clamp(1rem, 2vw, 2.2rem) 3rem;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(4px);
+      background: color-mix(in srgb, var(--paper) 90%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.8rem clamp(1rem, 2vw, 2.2rem);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-size: 0.82rem;
+    }
+
+    .brand i { color: var(--accent); }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .nav a {
+      text-decoration: none;
+      border: 1px solid transparent;
+      padding: 0.42rem 0.6rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      transition: all var(--ease);
+    }
+
+    .nav a.active,
+    .nav a:hover {
+      color: var(--ink);
+      border-color: var(--ink);
+      background: #ffffff8f;
+    }
+
+    .hero {
+      padding: clamp(1.4rem, 4vw, 3.6rem) 0 1.6rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1.1rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--gap);
+    }
+
+    .kicker {
+      font-family: "IBM Plex Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      font-weight: 600;
+    }
+
+    h1 {
+      margin-top: 0.5rem;
+      font-size: clamp(2rem, 4.4vw, 4rem);
+      max-width: 16ch;
+    }
+
+    .lead {
+      margin-top: 0.85rem;
+      max-width: 58ch;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .metrics {
+      border: 1px solid var(--ink);
+      background: #fff8;
+      padding: 0.8rem;
+      align-self: end;
+      display: grid;
+      gap: 0.55rem;
+      font-size: 0.88rem;
+    }
+
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px dotted var(--line);
+      padding-bottom: 0.3rem;
+    }
+
+    .views {
+      position: relative;
+      min-height: 56vh;
+      margin-top: 1.2rem;
+    }
+
+    .view {
+      display: none;
+      animation: rise 420ms ease forwards;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .view.active { display: block; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--gap);
+    }
+
+    .col-8 { grid-column: span 8; }
+    .col-4 { grid-column: span 4; }
+    .col-6 { grid-column: span 6; }
+    .col-12 { grid-column: span 12; }
+
+    .card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 1rem;
+      min-height: 100%;
+    }
+
+    .card h3 {
+      font-size: clamp(1rem, 2.4vw, 1.35rem);
+      margin-bottom: 0.65rem;
+    }
+
+    .card p {
+      margin: 0 0 0.9rem;
+      line-height: 1.68;
+      color: #222;
+    }
+
+    .blog-download-thumb {
+      width: 100%;
+      display: block;
+      border: 1px solid var(--line);
+      background: #ece9df;
+      margin: 0 0 0.7rem;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+    }
+
+    .blog-download-copy {
+      margin: 0 0 0.7rem;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .blog-download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      border: 1px solid var(--ink);
+      padding: 0.4rem 0.55rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: all var(--ease);
+      background: #fff;
+    }
+
+    .blog-download-link:hover {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--ink);
+      padding: 0.28rem 0.6rem;
+      min-height: 2.1rem;
+      font-size: 0.72rem;
+      font-family: "IBM Plex Mono", monospace;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0 0.45rem 0.8rem 0;
+      vertical-align: middle;
+      background: #fff8;
+    }
+
+    .word-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      padding: 0.28rem 0.6rem;
+      min-height: 2.1rem;
+      line-height: 1;
+      margin-bottom: 0.8rem;
+      background: #fff8;
+      vertical-align: middle;
+    }
+
+    .profile-photo {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border: 1px solid var(--ink);
+      background: #ece9df;
+      margin-bottom: 0.65rem;
+    }
+
+    .profile-caption {
+      margin: 0 0 1rem;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .resource-shot {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #ece9df;
+      margin: 0.35rem 0 0.8rem;
+      display: block;
+    }
+
+    .resource-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .resource-head h3 { margin: 0; }
+
+    .page-head {
+      border-bottom: 1px solid var(--line);
+      padding: 0.1rem 0 0.8rem;
+      margin: 0 0 1rem;
+    }
+
+    .page-head h2 {
+      font-size: clamp(1.15rem, 2.7vw, 1.9rem);
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .page-head p {
+      margin: 0.4rem 0 0;
+      color: var(--muted);
+      max-width: 70ch;
+      line-height: 1.55;
+    }
+
+    .foot {
+      margin-top: 2rem;
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity var(--ease), transform var(--ease);
+    }
+
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* Masonry layout for resources */
+    .resources-masonry {
+      columns: 3;
+      column-gap: var(--gap);
+    }
+
+    .resource-card {
+      break-inside: avoid;
+      margin-bottom: var(--gap);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 1rem;
+      cursor: pointer;
+      transition: all var(--ease);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .resource-card:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 72%, #000000 28%);
+      outline-offset: 3px;
+    }
+
+    .resource-card:hover {
+      background: #fafaf6;
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    .resource-card.extra {
+      background: linear-gradient(
+        165deg,
+        color-mix(in srgb, #eaffec 82%, var(--panel) 18%) 0%,
+        color-mix(in srgb, #d9f8df 74%, var(--paper) 26%) 100%
+      );
+      border-color: color-mix(in srgb, #9fd7aa 68%, var(--line) 32%);
+      box-shadow:
+        inset 3px 0 0 color-mix(in srgb, #69af7a 62%, transparent),
+        0 1px 0 color-mix(in srgb, #ffffff 70%, transparent);
+      overflow: hidden;
+    }
+
+    .resource-card.extra::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -140%;
+      width: 78%;
+      height: 100%;
+      background: linear-gradient(
+        110deg,
+        transparent 0%,
+        color-mix(in srgb, #ffffff 72%, transparent) 48%,
+        transparent 100%
+      );
+      opacity: 0.28;
+      pointer-events: none;
+      animation: extraShimmer 8.5s ease-in-out infinite;
+      will-change: transform;
+      z-index: 0;
+    }
+
+    .resource-card.extra > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .resource-card.extra h3,
+    .resource-card.extra p {
+      color: color-mix(in srgb, #275d36 72%, var(--ink) 28%);
+    }
+
+    .resource-card.extra .resource-card-footer {
+      color: color-mix(in srgb, #3f8b56 78%, var(--muted) 22%);
+      border-top-color: color-mix(in srgb, #9fd7aa 54%, var(--line) 46%);
+    }
+
+    .resource-card.extra:hover {
+      background: linear-gradient(
+        165deg,
+        color-mix(in srgb, #effff1 88%, #ffffff 12%) 0%,
+        color-mix(in srgb, #dcfae3 82%, var(--paper) 18%) 100%
+      );
+      border-color: color-mix(in srgb, #74bf87 74%, var(--line) 26%);
+    }
+
+    @keyframes extraShimmer {
+      0%,
+      72%,
+      100% {
+        transform: translateX(0%);
+        opacity: 0;
+      }
+      8%,
+      52% {
+        opacity: 0.3;
+      }
+      44% {
+        transform: translateX(300%);
+        opacity: 0;
+      }
+    }
+
+    .resources-divider {
+      column-span: all;
+      break-inside: avoid;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 0.35rem 0 var(--gap);
+      color: var(--muted);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .resources-divider::before,
+    .resources-divider::after {
+      content: "";
+      height: 1px;
+      background: color-mix(in srgb, var(--line) 70%, transparent);
+      flex: 1;
+    }
+
+    .resources-divider span {
+      border: 1px solid color-mix(in srgb, var(--line) 84%, var(--paper) 16%);
+      background: color-mix(in srgb, var(--paper) 78%, #ffffff 22%);
+      padding: 0.25rem 0.65rem;
+    }
+
+    .resource-card-summary {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .resource-card-image {
+      width: 100%;
+      height: auto;
+      object-fit: unset;
+      border: 1px solid var(--line);
+      background: #ece9df;
+      margin: 0.75rem 0;
+      display: block;
+    }
+
+    .resource-card h3 {
+      font-size: 1rem;
+      margin: 0 0 0.45rem;
+      color: var(--ink);
+    }
+
+    .resource-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: var(--muted);
+      flex: 1;
+    }
+
+    blockquote {
+      margin: 1.2rem 0;
+      padding: 1rem 1.1rem 1rem 1.25rem;
+      border-left: 4px solid var(--accent);
+      background: color-mix(in srgb, var(--panel) 82%, #ffffff 18%);
+    }
+
+    blockquote p {
+      margin: 0;
+      color: var(--ink);
+      font-size: 1rem;
+      line-height: 1.72;
+    }
+
+    table {
+      width: 100%;
+      margin: 1.2rem 0;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      background: #fffdf8;
+      font-size: 0.94rem;
+    }
+
+    th,
+    td {
+      padding: 0.8rem 0.9rem;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    th {
+      background: color-mix(in srgb, var(--paper) 90%, #ffffff 10%);
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    tbody tr:nth-child(even) {
+      background: color-mix(in srgb, var(--panel) 84%, #ffffff 16%);
+    }
+
+    .resource-card .resource-head {
+      margin-bottom: 0.4rem;
+    }
+
+    .resource-card-footer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+
+    .resource-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0;
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .resource-back-link:hover {
+      color: var(--ink);
+    }
+
+    .resource-detail-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+      margin-top: 0.4rem;
+    }
+
+    .resource-detail-head {
+      display: grid;
+      gap: 0.85rem;
+      padding-top: 0.35rem;
+      padding-bottom: 1.05rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .resource-detail-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .resource-detail-topline .tag {
+      margin: 0;
+    }
+
+    .resource-detail-titleblock {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .resource-detail-titleblock h2,
+    .resource-detail-titleblock p {
+      margin: 0;
+    }
+
+    .resources-head {
+      display: grid;
+      gap: 0.75rem;
+      padding-top: 0.35rem;
+      padding-bottom: 1.05rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .resources-head-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .resources-head-topline .tag {
+      margin: 0;
+    }
+
+    .resources-head-note {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .resources-head-titleblock {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .resources-head-titleblock h2,
+    .resources-head-titleblock p {
+      margin: 0;
+    }
+
+    .section-head-light {
+      display: grid;
+      gap: 0.65rem;
+      padding-top: 0.3rem;
+      padding-bottom: 0.95rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .section-head-light-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .section-head-light-topline .tag {
+      margin: 0;
+    }
+
+    .section-head-light-note {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-head-light-titleblock {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .section-head-light-titleblock h2,
+    .section-head-light-titleblock p {
+      margin: 0;
+    }
+
+    .resource-detail-actions .word-chip {
+      margin-bottom: 0;
+    }
+
+    .resource-permalink {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.1rem;
+      border: 1px solid var(--ink);
+      background: #fff;
+      padding: 0.28rem 0.65rem;
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-family: "IBM Plex Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: all var(--ease);
+    }
+
+    .resource-permalink:hover {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .resource-detail-grid {
+      align-items: start;
+    }
+
+    .resource-detail-body {
+      line-height: 1.72;
+      color: #222;
+    }
+
+    .resource-detail-body p {
+      margin: 0 0 1rem;
+    }
+
+    .resource-detail-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .resource-detail-body figure {
+      margin: 1.1rem 0;
+      padding: 0.65rem;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, #ffffff 78%, var(--paper));
+      box-shadow: 0 8px 20px rgba(17, 17, 17, 0.08);
+    }
+
+    .resource-detail-body figure img {
+      display: block;
+      width: 100%;
+      cursor: zoom-in;
+    }
+
+    .resource-detail-body figcaption {
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--line);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .resource-detail-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: sticky;
+      top: 5rem;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 200ms ease;
+      overflow-y: auto;
+    }
+
+    .modal.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-inner {
+      margin: auto;
+      width: min(100%, 920px);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 2rem;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 300ms ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1rem;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.45rem;
+      flex: 1;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.25rem;
+      display: flex;
+      align-items: center;
+      color: var(--muted);
+      transition: color var(--ease);
+    }
+
+    .modal-close:hover {
+      color: var(--ink);
+    }
+
+    .modal-content {
+      margin-bottom: 1.5rem;
+      overflow: auto;
+    }
+
+    .modal-body {
+      line-height: 1.72;
+      color: #222;
+    }
+
+    .modal-body p {
+      margin: 0 0 1rem;
+    }
+
+    .modal-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .modal-body blockquote {
+      margin: 1.35rem 0;
+    }
+
+    .modal-body table {
+      display: block;
+      overflow-x: auto;
+      white-space: normal;
+    }
+
+    .modal-body figure {
+      margin: 1.1rem 0;
+      padding: 0.65rem;
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, #ffffff 78%, var(--paper));
+      box-shadow: 0 8px 20px rgba(17, 17, 17, 0.08);
+    }
+
+    .modal-body figure img {
+      display: block;
+      width: 100%;
+    }
+
+    .modal-body figcaption {
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--line);
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .modal-body th,
+    .modal-body td {
+      min-width: 150px;
+    }
+
+    .modal-sidebar {
+      float: right;
+      width: 200px;
+      margin: 0 0 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-media-item {
+      border: 1px solid var(--line);
+      background: #f8f7f3;
+      padding: 0;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--ease);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-media-item:hover {
+      border-color: var(--accent);
+      background: #fafaf6;
+      transform: translateY(-2px);
+    }
+
+    .modal-media-thumbnail {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: #ece9df;
+      display: block;
+    }
+
+    .modal-media-label {
+      padding: 0.75rem;
+      font-size: 0.85rem;
+      text-align: center;
+      color: var(--ink);
+      font-weight: 500;
+      border-top: 1px solid var(--line);
+    }
+
+    .modal-download-link {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--ease);
+      text-decoration: none;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .modal-download-link:hover {
+      background: #fafaf6;
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 101;
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+
+    .lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-image {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      animation: zoomIn 300ms ease;
+    }
+
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      cursor: pointer;
+      color: white;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      transition: background 200ms ease;
+      border-radius: 4px;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .reflection-hidden {
+      display: none;
+    }
+
+    .scroll-hint {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 88px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 220ms ease, transform 220ms ease;
+      z-index: 30;
+    }
+
+    .scroll-hint.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .scroll-hint-gradient {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 88px;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.26), transparent 72%);
+    }
+
+    .scroll-hint-arrows {
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      align-items: center;
+    }
+
+    .scroll-hint-arrows span {
+      width: 10px;
+      height: 10px;
+      border-right: 1.5px solid color-mix(in srgb, var(--muted) 72%, transparent);
+      border-bottom: 1.5px solid color-mix(in srgb, var(--muted) 72%, transparent);
+      transform: rotate(45deg);
+      opacity: 0.2;
+      animation: hintPulse 1.7s ease-in-out infinite;
+    }
+
+    .scroll-hint-arrows span:nth-child(2) {
+      animation-delay: 0.18s;
+    }
+
+    .scroll-hint-arrows span:nth-child(3) {
+      animation-delay: 0.36s;
+    }
+
+    @keyframes hintPulse {
+      0%, 100% {
+        opacity: 0.18;
+        transform: rotate(45deg) translateY(0);
+      }
+      50% {
+        opacity: 0.52;
+        transform: rotate(45deg) translateY(3px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-hint-arrows span {
+        animation: none;
+        opacity: 0.36;
+      }
+
+      .resource-card.extra::after {
+        animation: none;
+        opacity: 0;
+      }
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 940px) {
+      .hero { grid-template-columns: 1fr; }
+      .col-8, .col-6, .col-4 { grid-column: span 12; }
+      .topbar-inner { align-items: flex-start; flex-direction: column; }
+      .resources-masonry { columns: 1; }
+      .resource-detail-sidebar { position: static; }
+
+      .resource-detail-head {
+        gap: 0.75rem;
+      }
+
+      .resource-detail-topline {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .resources-head-topline {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .section-head-light-topline {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .resource-detail-actions {
+        margin-top: 0.2rem;
+      }
+
+      .modal-inner {
+        width: min(100%, 95vw);
+        padding: 1.5rem;
+        max-height: 90vh;
+      }
+      
+      .modal-sidebar {
+        float: none;
+        width: 100%;
+        margin: 1.5rem 0 0 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        flex-direction: row;
+        gap: 1rem;
+      }
+      
+      .modal-media-item,
+      .modal-download-link {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <i data-lucide="layout-grid" aria-hidden="true"></i>
+        <span>EDU1003 Portfolio</span>
+      </div>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#home" data-route="home">Home</a>
+        <a href="#about" data-route="about">About Me</a>
+        <a href="#blog" data-route="blog">Blog</a>
+        <a href="#resources" data-route="resources">Resources</a>
+        <a href="#references" data-route="references">References</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="views">
+      <article class="view active" id="home">
+        <section class="hero reveal">
+          <div>
+            <div class="kicker">Professional Portfolio Website</div>
+            <h1>Teaching with clarity, care, and digital intention.</h1>
+            <p class="lead">
+              This single-page portfolio presents my growth as a pre-service teacher across professional identity, critical digital literacy, and classroom-focused design. It follows AT3 requirements with an emphasis on accessible structure, ethical referencing, and practical resource creation.
+            </p>
+          </div>
+          <aside class="metrics" aria-label="Assessment overview">
+            <div class="metric"><span>Task</span><strong>AT3</strong></div>
+            <div class="metric"><span>Word Target</span><strong>~2000</strong></div>
+            <div class="metric"><span>Format</span><strong>SPA</strong></div>
+            <div class="metric"><span>Status</span><strong>Submission-ready</strong></div>
+          </aside>
+        </section>
+        <div class="grid">
+          <div class="col-6 card reveal">
+            <span class="tag">Scope</span>
+            <h3>What this website includes</h3>
+            <p>About Me (professional profile), one critical blog post, and seven educational resources with linked critical reflections. Each section is designed for quick navigation and clear reading on desktop and mobile.</p>
+          </div>
+          <div class="col-6 card reveal">
+            <span class="tag">Design Logic</span>
+            <h3>Swiss-inspired visual system</h3>
+            <p>The site uses strict grid rhythm, concise typography, restrained color contrast, and high-legibility spacing. Content blocks are modular so assessment evidence is easy to locate and verify against rubric criteria.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="view" id="about">
+        <header class="page-head reveal section-head-light">
+          <div class="section-head-light-topline">
+            <span class="tag">Profile</span>
+            <span class="section-head-light-note">Identity and Direction</span>
+          </div>
+          <div class="section-head-light-titleblock">
+            <h2>About Me</h2>
+            <p>Professional identity and reflective teaching journey.</p>
+          </div>
+        </header>
+        <div class="grid">
+          <div class="col-8 card reveal">
+            <span class="tag">About Me</span>
+            <div class="word-chip"><i data-lucide="file-text"></i> <span id="aboutCount">0 words</span></div>
+            <!-- BEGIN:about-content -->
+              <p class="countable" data-count-id="aboutCount">My name is Alec Sloman, and I am a pre-service teacher at La Trobe University. I came to teaching through a difficult personal experience of schooling. As a student, I was socially awkward, often disengaged, and uncertain about the purpose of what I was being asked to learn. Over time, that frustration became open resistance, and I know now that I made life hard for teachers who were trying to help. Looking back with more maturity, I do not see that period as evidence that I was incapable of learning. I see it as evidence of how easily students can be disconnected when school feels like compliance instead of growth. That perspective now shapes my professional identity: I want to create classrooms where students who feel alienated still have a clear pathway back into learning.</p>
+              <p class="countable" data-count-id="aboutCount">My schooling years coincided with an era where high-stakes testing strongly influenced classroom practice. In many subjects, learning felt narrowed to test preparation, while curiosity, creativity, and critical thinking seemed secondary. Even when individual teachers attempted to connect learning to my interests, the wider system constrained what was possible. I often felt reduced to performance data rather than seen as a developing person. I never completed high school in the traditional pathway, instead earning a GED and later moving to Australia to study Music Production at TAFE. Although I cared deeply about music, I still struggled because I had not yet learned how to learn effectively. Completing that course was important, but it did not immediately restore my confidence in formal education. At the time, I believed self-directed learning was my only viable option.</p>
+              <p class="countable" data-count-id="aboutCount">Teaching myself software development changed that trajectory. Programming gave me structure, autonomy, and visible progress, and it opened a twenty-year career across IT and software development. For the first time, learning felt empowering because effort produced tangible outcomes. After many years in industry, however, I began to want work that was more directly meaningful. An unexpected opportunity to teach a software development boot camp became a turning point. Despite having no formal teacher training at the time, I discovered that supporting learners was the most purposeful work I had done. I loved helping people move from uncertainty to competence, and I was especially motivated by students who doubted their own ability. That experience confirmed that education was not something I needed to avoid; it was where my professional strengths and personal values could meet.</p>
+              <p class="countable" data-count-id="aboutCount">As I prepare to become a secondary teacher, I bring an interdisciplinary background in software development, music production, and carpentry. I aim to teach technology and design, while also engaging my interests in history and civics to build broad, connected learning experiences. My teaching goal is to combine high expectations with practical support: clear success criteria, authentic tasks, and explicit instruction in how to learn, not just what to produce. I am particularly committed to helping students who feel out of place in school, because I understand that experience firsthand. In my classroom, digital tools should expand access and agency rather than distract from learning. Ultimately, I want to help young people find direction earlier than I did, develop confidence in their own capabilities, and leave school with both knowledge and a sense of possibility.</p>
+            <!-- END:about-content -->
+          </div>
+
+          <aside class="col-4 card reveal">
+            <!-- BEGIN:about-sidebar -->
+              <span class="tag">Professional Focus</span>
+              <img
+                class="profile-photo"
+                src="alec_sloman.jpeg"
+                alt="Portrait photo of Alec Sloman for the About Me section"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              />
+              <p class="profile-caption">About Me Portrait</p>
+              <h3>Current priorities</h3>
+              <p>Evidence-informed planning, inclusive task design, and ethical digital literacy are the three anchors shaping my present teaching identity.</p>
+              <h3 style="margin-top: 1rem;">Next step</h3>
+              <p>Translate this reflective stance into classroom-ready sequences that include differentiated supports, transparent success criteria, and targeted formative feedback.</p>
+            <!-- END:about-sidebar -->
+          </aside>
+        </div>
+      </article>
+
+      <article class="view" id="blog">
+        <header class="page-head reveal section-head-light">
+          <div class="section-head-light-topline">
+            <span class="tag">Essay</span>
+            <span class="section-head-light-note">Critical Reflection</span>
+          </div>
+          <div class="section-head-light-titleblock">
+            <h2>Blog</h2>
+            <p>Critical reflection on AI, cognition, and learning design.</p>
+          </div>
+        </header>
+        <div class="grid">
+          <div class="col-8 card reveal">
+            <span class="tag">Blog Post</span>
+            <div class="word-chip"><i data-lucide="pen-line"></i> <span id="blogCount">0 words</span></div>
+            <!-- BEGIN:blog-content -->
+              <h3>For Learning, Toil is Not Optional</h3>
+              <p class="countable" data-count-id="blogCount">Alec Sloman</p>
+              <p class="countable" data-count-id="blogCount">Recently, while browsing Reddit, I was served an ad by Anthropic - the creators of Claude - which claimed that "toil is optional." Ordinarily, I would ignore a line like that. But as a software developer, I recognise that it is not entirely hyperbole. As of late 2025, coding agents such as Claude Code demonstrate capabilities that would have been difficult to imagine even a few years ago.</p>
+              <p class="countable" data-count-id="blogCount">Much of the routine burden of development - repeating familiar patterns, tracking down elusive bugs, maintaining documentation, and managing dependencies - is being reduced at a rapid pace.</p>
+              <p class="countable" data-count-id="blogCount">In that sense, toil in software development is increasingly treated as a liability to be minimised. But in education, toil plays a different role. It is not incidental; it is formative. The effort involved in grappling with material is part of the biological processes through which understanding is built. When that struggle is offloaded, we alter the conditions under which mastery develops.</p>
+              <p class="countable" data-count-id="blogCount">A 2025 study from the MIT Media Lab on AI-assisted writing found clear differences in brain activity:</p>
+              <p class="countable" data-count-id="blogCount">EEG revealed significant differences in brain connectivity: Brain-only participants exhibited the strongest, most distributed networks; search engine users showed moderate engagement; and LLM users displayed the weakest connectivity.</p>
+              <p class="countable" data-count-id="blogCount">Participants wrote an essay either unaided, with search engines, or with LLMs. While the study measures electrical activity, reduced engagement may correspond to reduced conditions associated with synaptogenesis and myelination - the processes by which neural connections are formed and strengthened through use.</p>
+              <p class="countable" data-count-id="blogCount">Imagine a field of tall grass. Each time you walk between two landmarks - a boulder, a stream, a stand of trees - you press down a faint trail. That is synaptogenesis: the path begins to exist. Walk it repeatedly, and the trail hardens, the ground compacts, and movement becomes faster. That is myelination: the path becomes efficient.</p>
+              <p class="countable" data-count-id="blogCount">A brain that labours lays down paths and reinforces them. A brain that offloads too early walks less ground - and builds fewer roads. Mastery requires walking those paths again and again. Toil, in other words.</p>
+              <p class="countable" data-count-id="blogCount">Now consider LLMs. Imagine a machine traversing many possible paths between landmarks at a scale no human could approach. Modern training runs require a staggering 10<sup>26</sup> discrete computations. This is a septillion-fold 'metabolic' effort - a relentless process of trial and error used to calculate and reinforce the digital pathways that eventually look like fluency.</p>
+              <p class="countable" data-count-id="blogCount">This is the scale of repetition that underlies the model's apparent fluency. Through it, pathways between concepts are formed and reinforced at scale. Without that process, the model would have no reliable way to move between those landmarks at all.</p>
+              <p class="countable" data-count-id="blogCount">So why do we think a student can skip theirs?</p>
+              <p class="countable" data-count-id="blogCount">When we peek behind the curtain, the "magic" dissolves. What remains is scale - and toil. It feels effortless only because we never see the work that produced it.</p>
+              <p class="countable" data-count-id="blogCount">That is the trap. Like a stage magician, the system presents the finished artifact while concealing the process that made it possible. If we hand a student that artifact - the essay - we are not accelerating their learning; we are bypassing it.</p>
+              <p class="countable" data-count-id="blogCount">The paths are not walked. The trails are not cut. The roads are never consolidated. We may hold a finished piece of writing, but we remain in the field, without the means to move from one landmark to the next.</p>
+              <p class="countable" data-count-id="blogCount">We cannot simply ban AI. The challenge is not exclusion, but design. We need to make cognitive toil desirable within environments where instant answers are always available.</p>
+              <p class="countable" data-count-id="blogCount">This runs against the prevailing framing of such tools, where toil is treated as inefficiency to be eliminated. But the evidence suggests otherwise: when the struggle is removed, so too are the conditions under which learning is built.</p>
+              <p class="countable" data-count-id="blogCount">The question is not whether difficulty can be avoided, but whether learning can survive without it. Human intelligence still appears to require a metabolic price of admission. Toil is that price.</p>
+            <!-- END:blog-content -->
+          </div>
+
+          <aside class="col-4 card reveal" aria-label="Blog downloadable resource">
+            <!-- BEGIN:blog-sidebar -->
+              <span class="tag">Download</span>
+              <h3>Downloadable Resource</h3>
+              <img
+                class="blog-download-thumb"
+                src="blog_thumbnail.png"
+                alt="Thumbnail preview of the annotated blog PDF"
+                loading="lazy"
+              />
+              <p class="blog-download-copy">This article is available as a PDF and is fully annotated with illustrations.</p>
+              <a class="blog-download-link" href="For%20Learning,%20Toil%20is%20Not%20Optional.pdf" download>
+                <i data-lucide="file-down"></i>
+                Download PDF
+              </a>
+            <!-- END:blog-sidebar -->
+          </aside>
+        </div>
+      </article>
+
+      <article class="view" id="resources">
+        <header class="page-head reveal resources-head">
+          <div class="resources-head-topline">
+            <span class="tag">Resources</span>
+            <span class="resources-head-note">Open Any Card</span>
+          </div>
+          <div class="resources-head-titleblock">
+            <h2>Educational Resources</h2>
+            <p>Seven learning artifacts with linked critical reflections. Open any card to visit its dedicated reflection page.</p>
+          </div>
+        </header>
+        <div class="resources-masonry">
+          <!-- BEGIN:resource-cards -->
+            <!-- Resource 1: Infographic -->
+            <div class="resource-card reveal" data-resource="1" data-slug="infographic" data-route="#resources/infographic" tabindex="0" role="link" aria-label="Open Infographic reflection page">
+              <div class="resource-card-summary">
+                <div class="resource-head">
+                  <h3>Infographic</h3>
+                  <i data-lucide="chart-column"></i>
+                </div>
+                <p>A collection of memes that discuss LLMs in education</p>
+                <img
+                  class="resource-card-image"
+                  src="principal_skinner_meme.png"
+                  alt="A collection of memes that discuss LLMs in education"
+                  loading="lazy"
+                />
+              </div>
+              <div class="resource-card-footer">
+                <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i> Open Reflection Page
+              </div>
+            </div>
+
+            <!-- Resource 2: Gamification -->
+            <div class="resource-card reveal" data-resource="2" data-slug="gamification" data-route="#resources/gamification" tabindex="0" role="link" aria-label="Open Gamification reflection page">
+              <div class="resource-card-summary">
+                <div class="resource-head">
+                  <h3>Gamification</h3>
+                  <i data-lucide="gamepad-2"></i>
+                </div>
+                <p>Browser-based APA7 referencing game inspired by classic computer lab serious games.</p>
+                <img
+                  class="resource-card-image"
+                  src="gamification.png"
+                  alt="Screenshot of the APA7 gamification challenge resource"
+                  loading="lazy"
+                />
+                <p><a href="https://alexsoloman173-lgtm.github.io/APA7-challange/" target="_blank" rel="noreferrer">Open the challenge →</a></p>
+              </div>
+              <div class="resource-card-footer">
+                <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i> Open Reflection Page
+              </div>
+            </div>
+
+            <!-- Resource 3: AI Activity -->
+            <div class="resource-card reveal wide" data-resource="3" data-slug="ai-activity" data-route="#resources/ai-activity" tabindex="0" role="link" aria-label="Open AI Activity reflection page">
+              <div class="resource-card-summary">
+                <div class="resource-head">
+                  <h3>AI Activity</h3>
+                  <i data-lucide="sparkles"></i>
+                </div>
+                <p>A study of LLM-generated lesson plans.</p>
+                <img
+                  class="resource-card-image"
+                  src="lesson_plan.png"
+                  alt="AI Task lesson plan thumbnail"
+                  loading="lazy"
+                />
+              </div>
+              <div class="resource-card-footer">
+                <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i> Open Reflection Page
+              </div>
+            </div>
+
+            <div class="resources-divider" aria-label="Extra resources">
+              <span>Extras</span>
+            </div>
+
+            <!-- Resource 4: Cosmic Chronometer -->
+            <div class="resource-card reveal tall extra" data-resource="4" data-slug="cosmic-chronometer" data-route="#resources/cosmic-chronometer" tabindex="0" role="link" aria-label="Open Cosmic Chronometer reflection page">
+              <div class="resource-card-summary">
+                <div class="resource-head">
+                  <h3>Cosmic Chronometer</h3>
+                  <i data-lucide="orbit"></i>
+                </div>
+                <p>Interactive app for cosmic expansion visualization.</p>
+                <img
+                  class="resource-card-image"
+                  src="chronometer_screenshot.png"
+                  alt="Cosmic Chronometer application interface"
+                  loading="lazy"
+                />
+                <p><a href="https://rexmortus.github.io/cosmic_chronometer/" target="_blank" rel="noreferrer">Open the app →</a></p>
+              </div>
+              <div class="resource-card-footer">
+                <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i> Open Reflection Page
+              </div>
+            </div>
+
+            <!-- Resource 5: Status Cards -->
+            <div class="resource-card reveal tall extra" data-resource="5" data-slug="status-cards" data-route="#resources/status-cards" tabindex="0" role="link" aria-label="Open Status Cards reflection page">
+              <div class="resource-card-summary">
+                <div class="resource-head">
+                  <h3>Status Cards</h3>
+                  <i data-lucide="clipboard-check"></i>
+                </div>
+                <p>Formative assessment tool for classroom feedback.</p>
+                <img
+                  class="resource-card-image"
+                  src="status_cards.png"
+                  alt="Status cards resource"
+                  loading="lazy"
+                />
+                <p><a href="status_cards.pdf" download>Download PDF →</a></p>
+              </div>
+              <div class="resource-card-footer">
+                <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i> Open Reflection Page
+              </div>
+            </div>
+
+            <!-- Resource 6: SlideKey -->
+            <div class="resource-card reveal wide extra" data-resource="6" data-slug="slidekey" data-route="#resources/slidekey" tabindex="0" role="link" aria-label="Open SlideKey reflection page">
+              <div class="resource-card-summary">
+                <div class="resource-head">
+                  <h3>SlideKey</h3>
+                  <i data-lucide="presentation"></i>
+                </div>
+                <p>Text-first slide authoring tool with built-in educational design frameworks.</p>
+                <img
+                  class="resource-card-image"
+                  src="slide_key.png"
+                  alt="SlideKey application interface for education-focused slide authoring"
+                  loading="lazy"
+                />
+              </div>
+              <div class="resource-card-footer">
+                <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i> Open Reflection Page
+              </div>
+            </div>
+
+            <!-- Resource 7: Integrated Literacy Diagram -->
+            <div class="resource-card reveal tall extra" data-resource="7" data-slug="integrated-literacy-diagram" data-route="#resources/integrated-literacy-diagram" tabindex="0" role="link" aria-label="Open Integrated Literacy Diagram reflection page">
+              <div class="resource-card-summary">
+                <div class="resource-head">
+                  <h3>Integrated Literacy Diagram</h3>
+                  <i data-lucide="git-merge"></i>
+                </div>
+                <p>Reflective post on an ambitious literacy diagram project that ultimately stalled.</p>
+                <img
+                  class="resource-card-image"
+                  src="Pasted image 20260429100540.png"
+                  alt="Integrated Literacy Diagram showing braided domain capacities and torus activity modes"
+                  loading="lazy"
+                />
+                <p><a href="Integrated%20Literacy%20Diagram.pdf" download>Download PDF →</a></p>
+              </div>
+              <div class="resource-card-footer">
+                <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i> Open Reflection Page
+              </div>
+            </div>
+          <!-- END:resource-cards -->
+        </div>
+
+        <!-- Hidden resource data for routed detail pages -->
+        <div class="reflection-hidden">
+          <!-- BEGIN:resource-reflections -->
+            <div id="reflection-1" data-resource="1" data-slug="infographic" data-title="Resource 1: Infographic (Week 3)" data-card-title="Infographic" data-summary="A collection of memes that discuss LLMs in education" data-word-count-id="ref1Count" data-media-images="clown_meme.png|principal_skinner_meme.png|salesman_meme.png">
+              <span id="ref1Count" style="display: none;">0 words</span>
+              <p class="countable" data-count-id="ref1Count">When I started studying education at La Trobe University, I did not fully anticipate how indispensable information design was to the practice of teaching. In retrospect, of course it makes perfect sense, but still, I was initially astonished by the breadth and depth of just this one field. Case in point, through researching the terms "chartjunk" and "hairball diagram" I encountered the eccentric and arcane works of <a href="https://www.edwardtufte.com/" target="_blank" rel="noreferrer">Edward Tufte</a>—and have enjoyed reading those tremendously.</p>
+              <p class="countable" data-count-id="ref1Count">Now, although we were instructed to design a traditional infographic, I made the conscious and admittedly risky (from a marking perspective) decision to make a collection of memes instead. What's more, I did so on the basis of my own preferences <em>and</em> of a single conversation with a friend and mentee who recently completed highschool. I asked them about the teachers who had the most enduring impact, and what specifically made the difference. To my delight, they cited the use of <em>image format memes</em>. Relating this to my own experience: I remember <em>many</em> memes but very <em>few</em> infographics. To keep the final product clear and easy to understand, I constrained each meme to one claim, used familiar meme templates, and paired each visual with explanatory text so the meaning was clear even if the joke did not land.</p>
+              <p class="countable" data-count-id="ref1Count">For the topic I elaborated on my blog post which discusses an article by the MIT Media Lab called "<a href="https://www.media.mit.edu/projects/your-brain-on-chatgpt/overview/" target="_blank" rel="noreferrer">Your Brain on ChatGPT</a>", and while I wrote about this on the LMS forum I wanted to illustrate some key aspects of my reflection in various meme formats to test the theory of whether they would be impactful. I also arranged the memes in a deliberate sequence: first, the false promise of "toil is optional" (time and effort); second, epistemic reliability (fabricated citations); third, systemic consequences (assessment integrity and the learner-teacher arms race). And while I believe that the memes speak for themselves—and they got good play on Reddit—my commentary now sits directly below the images.</p>
+              <figure>
+                <img class="resource-card-image" src="clown_meme.png" alt="Clown meme" loading="eager" />
+                <figcaption>The first meme emphasizes that LLMs often do not deliver on the core promise of saving time, but instead create new, laborious complications to overcome. Ironically, while you spend less time writing and understanding text, you spend more time trying to bypass the assessment without detection.</figcaption>
+              </figure>
+              <figure>
+                <img class="resource-card-image" src="principal_skinner_meme.png" alt="Principal Skinner meme" loading="eager" />
+                <figcaption>The second meme emphasizes that LLMs are known for inventing completely false citations, and the absurdity of relying on them in your workflow.</figcaption>
+              </figure>
+              <figure>
+                <img class="resource-card-image" src="salesman_meme.png" alt="Salesman meme" loading="eager" />
+                <figcaption>The third and final meme speaks to my personal frustration about how LLM use can diminish the reliability of important assessment types like written essays and creates a toxic arms-race dynamic between learners and teachers.</figcaption>
+              </figure>
+              <p class="countable" data-count-id="ref1Count">One challenge in the creation process was balancing humour with academic seriousness: too much irony and the point gets lost; too much exposition and the meme format collapses. My strategy was to keep each image focused on one claim, then use short written commentary to anchor interpretation and connect each visual back to the educational argument. Another challenge was the genre risk itself. I addressed that by being explicit about intent and by ensuring the sequence still functioned like an infographic narrative, even if the visual language was unconventional.</p>
+            </div>
+
+            <div id="reflection-2" data-resource="2" data-slug="gamification" data-title="Gamifying APA7: Learning from the Computer Lab Era" data-card-title="Gamification" data-summary="Browser-based APA7 referencing game inspired by classic computer lab serious games." data-word-count-id="ref2Count" data-media-images="gamification.png" data-media-link="https://alexsoloman173-lgtm.github.io/APA7-challange/" data-media-link-text="Open APA7 challenge">
+              <span id="ref2Count" style="display: none;">0 words</span>
+              <p>Growing up in the 80's and 90's, I recall with great fondness the educational software of the so-called "computer lab" era. Therefore, for the gamification resource, I chose to follow in the footsteps of classic games such as Word Munchers, Midnight Rescue, and the Oregon Trail to develop a browser-based learning game that helps the player memorize the APA7 reference style. The game, called "APA7 Challenge", can be found at the following URL: <a href="https://alexsoloman173-lgtm.github.io/APA7-challange/" target="_blank" rel="noreferrer">https://alexsoloman173-lgtm.github.io/APA7-challange/</a></p>
+              <p>The game employs a <em>falling tiles</em> style ala. <em>Tetris</em>: under time pressure from falling "reference fragments" the player must identify and arrange a complete APA7 reference before the timer runs out. As they correctly identify and assemble reference components, the player accumulates points, with higher scores awarded for accuracy and speed. In other words, the core gamification elements are time pressure, score accumulation, performance-based rewards, immediate feedback on correct assembly, and a clear win/lose condition. The core learning mechanic is still sheer repetition: where through repeated, interactive exposure to the component categories of the APA7 reference style, the learner can quickly master the format.</p>
+              <p>This topic was strongly related to my AT1 and AT2 submissions. In my AT1 submission, I assessed two research papers on game-based learning, the main takeaway being that although it has a long and storied history, rigorous research into its effectiveness—especially with regards long-term learning outcomes—is fragmented and spotty. Our group AT2 submission extended this research, exploring how teachers could best understand and implement game-based learning: not as a silver bullet to motivate disengaged learners, but as a highly targeted activity where low-stakes decision making and/or repetition are important aspects of the learning topic. That rationale is exactly why I selected these mechanics: the objective here was not broad conceptual inquiry, but procedural fluency with APA7 reference structure, and timed assembly plus scoring keeps students engaged while forcing repeated recall of the correct sequence and components.</p>
+              <p>To keep the game from overshadowing the educational objective, I deliberately kept the loop narrow: one task, one format, one success criterion (assemble a correct APA7 reference). There are no unrelated narrative layers or cosmetic reward systems competing for attention. The "fun" component is there to sustain effort and attention, but the points only come from demonstrating the target skill, so gameplay and learning objective remain tightly coupled.</p>
+              <p>The game itself is built with <em>Phaser.js</em>, <a href="https://www.geeksforgeeks.org/html/introduction-to-phaser-js/" target="_blank" rel="noreferrer">Introduction To Phaser.js - GeeksforGeeks</a>, a JavaScript framework for casual and educational games. Not wishing to spend too much time coding it, I received help from <em>Github's Co-pilot</em>. The game itself is very basic and can be considered a minimum-viable-product and nothing more. One challenge in the design process was controlling scope: there is always a temptation to add extra mechanics, polish, and features that are fun but pedagogically noisy. My solution was to keep the prototype intentionally constrained and to privilege clarity of the reference-building task over entertainment complexity. While I have no plans to develop it further, I will say that the core gameplay loop seemed to be effective and helped me to consolidate my own memorization of the APA7 format.</p>
+            </div>
+
+            <div id="reflection-3" data-resource="3" data-slug="ai-activity" data-title="Resource 3: AI Activity (Week 8)" data-card-title="AI Activity" data-summary="A study of LLM-generated lesson plans." data-word-count-id="ref3Count" data-media-images="lesson_plan.png" data-media-downloads="Lesson%20Planning%20Is%20Not%20a%20Prompting%20Problem.pdf|Introducing%20Linear%20Equations%20%28one-shot%29.pdf|Introducing%20Linear%20Equations%20%28with%20harness%29.pdf" data-media-download-names="Lesson Planning Is Not a Prompting Problem|Introducing Linear Equations (one-shot)|Introducing Linear Equations (with harness)">
+              <span id="ref3Count" style="display: none;">0 words</span>
+              <p class="countable" data-count-id="ref3Count">Developing this resource was both fun and interesting. As an expert in software development and a close follower of deep learning applications, I came in with a pretty serious advantages. It also happens that I built a lesson plan generator in week 2 of the course—integrated into my slide authoring tool SlideKey (see the resource for more information)—just for fun! So I'd already learned quite a lot about how to apply LLMs to this specific task, and had a battle-tested architecture ready to go.</p>
+              <p class="countable" data-count-id="ref3Count">Thus, my approach was just to rebuild it, with an LLM-coding agent, with a minimum of prompts. I then asked the agent to write a blog post—from its own perspective and in its own words—analyzing the problem space, describing our solution, and comparing the outputs of our "harness" versus "one-shot" prompt. I have to say: reading the agent's post was delightful.</p>
+              <p class="countable" data-count-id="ref3Count">The result is far from perfect, and the artifact that it ultimately generated could use a lot more work. But for 10 prompts—plus an 11th for the blog post—I am pleased with the result. Start by reading the download called "Lesson Planning is Not a Prompting Problem", and then look at the one-shot and harness versions of the lesson plan.</p>
+              <p class="countable" data-count-id="ref3Count">To answer the process questions directly: this was definitely not my first use of an LLM; I came into the task with prior experience building a lesson-plan generator, which shaped how I framed the prompting work. The main factors I considered were curriculum alignment, learner appropriateness, specificity of lesson structure, and output reliability: all areas where I already knew were problematic for a one-shot prompting approach. In practical terms, I harnessed the model toward concrete planning moves—clear learning intentions, worked examples, checks for understanding, and sequencing that matched an introductory linear equations lesson.</p>
+              <p class="countable" data-count-id="ref3Count">I was still surprised in a few places. The model could produce polished-sounding pedagogical language quickly, but it could also drift into useless filler or thin instructional logic if left under-constrained, which reinforced the value of the harness approach over one-shot prompting. So yes, I was satisfied overall, but conditionally: satisfied with the speed of ideation and baseline structure, not fully satisfied that it would survive contact with an actual classroom. The strengths were pace, coherence, and useful draft scaffolding; the weaknesses were uneven differentiation, occasional vagueness, and the need for substantial teacher judgment before classroom use.</p>
+              <p class="countable" data-count-id="ref3Count">And just in case you want to see a demonstration, this video (sorry it's 40 minutes long) actually demonstrates the whole activity in a conversational style.</p>
+              <h2>Video Walkthrough</h2>
+              <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;max-width:100%;">
+              	<iframe
+              		src="https://www.youtube.com/embed/OEIR847CIpE?rel=0&modestbranding=1"
+              		title="AI Activity Video"
+              		style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+              		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              		allowfullscreen>
+              	</iframe>
+              </div>
+              <p class="countable" data-count-id="ref3Count">If the embedded player is blocked in your browser, open the video directly here: <a href="https://youtu.be/OEIR847CIpE" target="_blank" rel="noreferrer">Watch on YouTube</a>.</p>
+            </div>
+
+            <div id="reflection-4" data-resource="4" data-slug="cosmic-chronometer" data-title="Resource 4: Cosmic Chronometer (Application Build)" data-card-title="Cosmic Chronometer" data-summary="Interactive app for cosmic expansion visualization." data-word-count-id="ref4Count" data-media-images="chronometer_screenshot.png" data-media-link="https://rexmortus.github.io/cosmic_chronometer/" data-media-link-text="Open interactive app">
+              <span id="ref4Count" style="display: none;">0 words</span>
+              <p class="countable" data-count-id="ref4Count">During the months between enrolment and commencement, I had some time to kill and decided to brush up on astrophysics: the <em>cosmological redshift</em> in particular. For those who aren't familiar, it's in the same category as the doppler effect—which I love for its eminent observability. No experiment or special instruments required: just the sound of the ambulance siren pitching up as it approaches, and pitching down as it drives away, the pressure wave compressed by forward motion and elongated by backward motion.</p>
+              <p class="countable" data-count-id="ref4Count">Now, one of the first things that you learn in modern cosmology is about the expanding nature of the universe. Despite appearances, everything in the universe is, in fact, moving away from <em>everything</em> else. The space between objects is <em>itself</em> expanding. But when you look out at the stars, you can't see this with the naked eye. In this regard, it's quite unlike the doppler effect because you need special instruments to observe it. But, the same principle applies because as light travels through space—and the space itself expands—the emitter is moving away from the observer, and if we transfer principles from sound to light—and they are both waves—then we should expect the light to "pitch down" and change wavelength: the <em>cosmological redshift.</em> And of course, it does exactly that.</p>
+              <p class="countable" data-count-id="ref4Count">But again, it's not observable to the naked eye, and therefore you may find yourself a bit lost trying to fathom it. And this is why I built the <em>cosmic chronometer</em>. I wanted to develop a visualization that communicated the relationship between space and time—mediated by the lightspeed constant—to show the cosmic inflation <em>intuitively</em>. I don't know how I did. It is a work in progress. I recognize that while it can answer questions, it doesn't supply them. Pedagogical scaffolds are missing. But, I'm proud of it, and for that reason I think it deserves a place in my portfolio of educational design work.</p>
+            </div>
+
+            <div id="reflection-5" data-resource="5" data-slug="status-cards" data-title="Resource 5: Status Cards (Formative Assessment Tool)" data-card-title="Status Cards" data-summary="Formative assessment tool for classroom feedback." data-word-count-id="ref5Count" data-media-images="status_cards.png" data-media-download="status_cards.pdf" data-media-download-name="Status Cards PDF">
+              <span id="ref5Count" style="display: none;">0 words</span>
+              <p class="countable" data-count-id="ref5Count">I designed this resource to solve a common classroom problem: teachers often ask "Any questions?" and receive little reliable information about who is following the lesson. Status Cards create immediate, non-optional feedback from every student, not just the most vocal or confident. By asking all learners to indicate a status color at key checkpoints, I can quickly identify patterns of understanding and confusion across the whole room. This makes instructional response more equitable and evidence-based, because I am acting on class-wide data rather than assumptions. The card format is simple, fast, and low-tech, which makes it practical for routine use without interrupting lesson momentum.</p>
+              <p class="countable" data-count-id="ref5Count">A second purpose is metacognitive: the cards prompt students to ask themselves, "How well do I understand this right now?" That self-check matters because many learners move through lessons passively unless prompted to monitor comprehension. By embedding this reflection as a normal classroom routine, students practice judging their own understanding and identifying when they need support. Over time, this can strengthen self-regulation and help students take more responsibility for their learning. From a design perspective, the color system supports rapid interpretation for both students and teacher, while the clear labels reduce ambiguity in how each status should be used.</p>
+              <p class="countable" data-count-id="ref5Count">The third function is communication quality. If students select green, they are prompted to briefly demonstrate learning; if they select yellow, red, or grey, they are prompted to articulate uncertainty, confusion, or missing information. This shifts classroom talk from vague confidence statements to actionable evidence. Critically, the tool still requires strong facilitation to avoid superficial responses, so my next improvement would be adding sentence stems and exemplar responses for each color. I would also track repeated status patterns over several lessons to inform differentiation and targeted reteaching. Overall, this resource shows how a simple digital/print tool can be used creatively and effectively to improve formative assessment, student voice, and instructional decision-making.</p>
+            </div>
+
+            <div id="reflection-6" data-resource="6" data-slug="slidekey" data-title="Resource 6: SlideKey (Education-Focused Slide Authoring App)" data-card-title="SlideKey" data-summary="Text-first slide authoring tool with built-in educational design frameworks." data-word-count-id="ref6Count" data-media-images="slide_key.png">
+              <span id="ref6Count" style="display: none;">0 words</span>
+              <p class="countable" data-count-id="ref6Count">I built SlideKey because most slide-authoring tools work against the way I naturally plan teaching materials. My preferred workflow is text-first: outline ideas, sequence explanation carefully, then shape presentation from that structure. Conventional slide software tends to privilege drag-and-drop layout, visual tweaking, and disconnected text boxes, which makes it harder to think clearly about knowledge progression. It also has very little domain knowledge about education. SlideKey was my attempt to build an authoring environment that starts from instructional thinking rather than generic presentation software conventions. Instead of asking me to design slides as isolated canvases, it lets me write and structure content more like an editor, then generate a stronger presentation layer from that foundation.</p>
+              <p class="countable" data-count-id="ref6Count">What makes the tool educationally significant is that the design frameworks are built into the authoring model itself. In the SlideKey project, education profiles and framework registries explicitly include Mayer's multimedia principles, Universal Design for Learning, and Cognitive Load Theory as defaults for presentation generation. That matters because it shifts these frameworks from after-the-fact checklists to active design constraints. I also used pretext.js in the broader SlideKey workflow to solve a common classroom presentation problem: text that looks acceptable while authoring but becomes too small, too dense, or poorly fitted when displayed. By using a measurement-based layout approach, the tool can size and fit text more deliberately, reducing overload and improving legibility.</p>
+              <p class="countable" data-count-id="ref6Count">Critically, I did not build SlideKey as a commercial product. I built it as a personal teaching tool for producing better educational materials. That intention shaped the project in a useful way: instead of chasing every presentation feature, I focused on problems that matter in real classrooms, such as text overload, weak visual hierarchy, and the absence of pedagogy-aware defaults in mainstream tools. If I continue developing it, my next priority would be tighter classroom-facing templates and more explicit support for checks for understanding, worked examples, and annotation-based teaching sequences. Overall, SlideKey demonstrates my capacity to combine software development knowledge with instructional design thinking in order to build tools that are creatively ambitious, pedagogically purposeful, and directly useful in my future teaching practice.</p>
+            </div>
+
+            <div id="reflection-7" data-resource="7" data-slug="integrated-literacy-diagram" data-title="Resource 7: Integrated Literacy Diagram" data-card-title="Integrated Literacy Diagram" data-summary="Reflective post on an ambitious literacy diagram project that ultimately stalled." data-word-count-id="ref7Count" data-media-images="Pasted image 20260429100540.png" data-media-download="Integrated%20Literacy%20Diagram.pdf" data-media-download-name="Integrated Literacy Diagram PDF">
+              <span id="ref7Count" style="display: none;">0 words</span>
+              <p class="countable" data-count-id="ref7Count">As part of my thinking process for the EDU1001 AT3 paper, I took a detour into diagram-making. It was productive as a form of reflection, but ultimately the project stalled. This post explains why.</p>
+              <p class="countable" data-count-id="ref7Count">For AT3, we were asked to choose one of three topics. I chose this one:</p>
+              <blockquote>
+                <p class="countable" data-count-id="ref7Count">Explain and justify the importance of students developing reading and writing skills across a range of subject/discipline areas in the primary and/or secondary years, establishing clear links to one or more of the evidence-based theories, frameworks or models of reading and/or writing covered in EDU1001/EDN1001.</p>
+              </blockquote>
+              <p class="countable" data-count-id="ref7Count">I sat down in the library and wrote a 2000-word wall of text just to see what emerged. Neuroplasticity, Scarborough's Reading Rope, disciplinary literacy - it all came tumbling out in a jumble. Only after turning those notes into a rough draft did the underlying idea become clear.</p>
+              <p class="countable" data-count-id="ref7Count">Using the visual metaphor of Scarborough's Reading Rope, I thought I could create a diagram linking subject areas, cognitive modalities, and professional disciplines.</p>
+              <p class="countable" data-count-id="ref7Count">Once I had that idea, it was hard to return to the essay itself. I became fixated on the visualization for several days. Here is what I learned.</p>
+              <p class="countable" data-count-id="ref7Count">First: according to my research, there is no exhaustive taxonomy of cognition. Or at least, none explicitly presented as such. The closest thing I found was <em>The Cambridge Handbook of Thinking and Reasoning</em>, which, by my reading, outlined 25 distinct cognitive modalities.</p>
+              <p class="countable" data-count-id="ref7Count">From there, the next problem emerged: how to connect those modalities to both school subjects and professional disciplines. The broader idea was simple enough. If cognitive modalities linked school subjects to professional practice, then perhaps we could answer questions like: <em>Why should a future engineer care about English Literature?</em></p>
+              <p class="countable" data-count-id="ref7Count">At a conceptual level, this was compelling. Part of me wanted a kind of "God's eye view" of the learning sciences, and Scarborough's Reading Rope seemed like the perfect metaphor for showing how subject areas cultivate the cognitive capacities later required in professional life.</p>
+              <p class="countable" data-count-id="ref7Count">In practice, however, the methodological problems were immense.</p>
+              <p class="countable" data-count-id="ref7Count">How could one <em>prove</em> that a specific cognitive modality belonged to a given subject area? Intuition and experience might produce something like this:</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Heading</th>
+                    <th>Items</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Language / English</td>
+                    <td>Similarity, Concepts and categories, Relational representation, Analogy, Language-based thinking</td>
+                  </tr>
+                  <tr>
+                    <td>Mathematics</td>
+                    <td>Deductive reasoning, Mathematical cognition, Thinking in working memory</td>
+                  </tr>
+                  <tr>
+                    <td>Science</td>
+                    <td>Induction, Causal learning, Mental models, Scientific thinking</td>
+                  </tr>
+                  <tr>
+                    <td>Humanities</td>
+                    <td>Cultural thought, Motivated thinking, Decision making</td>
+                  </tr>
+                  <tr>
+                    <td>Arts</td>
+                    <td>Creativity, Visuospatial reasoning</td>
+                  </tr>
+                  <tr>
+                    <td>Cross-disciplinary</td>
+                    <td>Problem solving, Heuristic judgment, Complex declarative learning, Production-system thinking, Implicit cognition</td>
+                  </tr>
+                  <tr>
+                    <td>Applied / Professional</td>
+                    <td>Legal reasoning, Medical reasoning</td>
+                  </tr>
+                  <tr>
+                    <td>General Infrastructure</td>
+                    <td>Intelligence (thinking capacity)</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="countable" data-count-id="ref7Count">But the model collapsed on contact with reality.</p>
+              <p class="countable" data-count-id="ref7Count">It failed to account for the enormous variability among both learners and teachers. For example, claiming that analogical reasoning belonged more to Languages than Mathematics quickly became untenable. Some mathematics teachers rely heavily on analogy; some English teachers hardly use it at all. Any clean categorization discarded too much of the real world to remain convincing.</p>
+              <p class="countable" data-count-id="ref7Count">So I considered a weighting system instead. Perhaps each cognitive modality could be related to subject areas probabilistically - say, on a 1-5 scale - based on teacher surveys and statistical aggregation.</p>
+              <p class="countable" data-count-id="ref7Count">Of course, I had no means of collecting data at anything close to a meaningful scale. The only feasible option was to rely on an LLM to estimate the relationships. I knew this was methodologically indefensible, but I wanted to see what the graph looked like anyway.</p>
+              <figure>
+                <img class="resource-card-image" src="Pasted image 20260429094823.png" alt="Dense graph linking subject areas to cognitive modalities" loading="eager" />
+              </figure>
+              <p class="countable" data-count-id="ref7Count">The result was not elegant or explanatory. It was a hairball. Worse, the edge weights themselves could easily have been nonsense.</p>
+              <p class="countable" data-count-id="ref7Count">The problem intensified when I tried to connect cognitive modalities to professional disciplines. Here, at least, there <em>was</em> a reliable taxonomy: the Australian Bureau of Statistics OSCA classification, containing 421 occupational categories.</p>
+              <p class="countable" data-count-id="ref7Count">But the same issue remained. How could an undergraduate student meaningfully map cognitive modalities across 421 professions? Again, an LLM could only approximate based on training data.</p>
+              <p class="countable" data-count-id="ref7Count">Still, I pressed on because I wanted to know whether the <em>diagram itself</em> could ever become useful or explanatory if supplied with sufficiently good data.</p>
+              <p class="countable" data-count-id="ref7Count">The answer, unsurprisingly, was this:</p>
+              <figure>
+                <img class="resource-card-image" src="Pasted image 20260429095319.png" alt="Graph linking cognitive modalities to professional disciplines" loading="eager" />
+              </figure>
+              <p class="countable" data-count-id="ref7Count">You could technically trace pathways between subject areas and professions through shared cognitive modalities, but the graph was so dense it became illegible.</p>
+              <figure>
+                <img class="resource-card-image" src="Pasted image 20260429095520.png" alt="Illegible network showing subject-profession pathways through modalities" loading="eager" />
+              </figure>
+              <p class="countable" data-count-id="ref7Count">At that point, the project had clearly failed in its original aim. The diagram no longer communicated anything meaningful at a "God's eye view," and I had not even begun integrating the actual visual metaphor of Scarborough's Reading Rope.</p>
+              <p class="countable" data-count-id="ref7Count">Eventually I realized the concept only worked if I made several major concessions:</p>
+              <ol>
+                <li>The taxonomy of cognition had to remain non-exhaustive.</li>
+                <li>The relationships between subjects and cognitive modalities had to be radically simplified.</li>
+                <li>The OSCA professional taxonomy had to be abandoned in favour of much broader abstractions.</li>
+              </ol>
+              <p class="countable" data-count-id="ref7Count">Even so, I wanted to see how far the idea could go. So I manually selected the edges between subject areas and cognitive modalities, then replaced professional disciplines with broader "personal and societal outcomes."</p>
+              <p class="countable" data-count-id="ref7Count">This was the result:</p>
+              <figure>
+                <img class="resource-card-image" src="Pasted image 20260429100159.png" alt="Simplified integrated literacy diagram using broader outcomes" loading="eager" />
+              </figure>
+              <p class="countable" data-count-id="ref7Count">Visually, it captured something of Scarborough's Reading Rope. But the underlying ontology - and especially the problem of assigning meaningful edge weights - was so compromised that I eventually had to concede defeat.</p>
+              <p class="countable" data-count-id="ref7Count">Still, the exercise taught me a few things.</p>
+              <p class="countable" data-count-id="ref7Count">First: literacy, like the brain itself, is extraordinarily interconnected. Tug on one thread and the entire system responds. Could such a system ever be meaningfully summarised in a single infographic? Perhaps. But it would require far more time, expertise, and methodological rigour than I could bring to the project.</p>
+              <p class="countable" data-count-id="ref7Count">Second: perhaps the "God's eye view" is not actually necessary. Maybe it is enough to recognise that education operates within a profoundly complex system, and to focus on teaching the students in front of us as well as we can.</p>
+              <p class="countable" data-count-id="ref7Count">Third: perhaps an infographic is simply the wrong medium. Maybe something this dense is better approached through metaphor, narrative, or poetry.</p>
+              <p class="countable" data-count-id="ref7Count">So, in the end, this was what remained:</p>
+              <blockquote>
+                <p class="countable" data-count-id="ref7Count">Learning, like the brain<br />
+              Is a galaxy of stars<br />
+              Too vast to fathom</p>
+              </blockquote>
+            </div>
+          <!-- END:resource-reflections -->
+        </div>
+      </article>
+
+      <article class="view" id="resource-detail">
+        <header class="page-head reveal resource-detail-head">
+          <div class="resource-detail-topline">
+            <a class="resource-back-link" href="#resources">
+              <i data-lucide="arrow-left"></i>
+              Back to resources
+            </a>
+            <span class="tag">Reflection</span>
+          </div>
+          <div class="resource-detail-titleblock">
+            <h2 id="resourceDetailTitle">Resource reflection</h2>
+            <p id="resourceDetailSummary">Open a resource from the Resources page to view its dedicated reflection page.</p>
+          </div>
+          <div class="resource-detail-actions">
+            <div class="word-chip"><i data-lucide="file-text"></i> <span id="resourceDetailWordCount">0 words</span></div>
+            <a class="resource-permalink" id="resourcePermalink" href="#resources">Permalink</a>
+          </div>
+        </header>
+        <div class="grid resource-detail-grid">
+          <div class="col-8 card reveal">
+            <div class="resource-detail-body" id="resourceDetailBody"></div>
+          </div>
+          <aside class="col-4 card reveal">
+            <div class="resource-detail-sidebar" id="resourceDetailSidebar"></div>
+          </aside>
+        </div>
+      </article>
+
+      <!-- Lightbox for images -->
+      <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+          <img class="lightbox-image" id="lightboxImage" src="" alt="" />
+          <button class="lightbox-close" aria-label="Close lightbox">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+      </div>
+
+      <article class="view" id="references">
+        <header class="page-head reveal section-head-light">
+          <div class="section-head-light-topline">
+            <span class="tag">Sources</span>
+            <span class="section-head-light-note">Cited Sources</span>
+          </div>
+          <div class="section-head-light-titleblock">
+            <h2>References</h2>
+            <p>External sources used across this portfolio website.</p>
+          </div>
+        </header>
+        <div class="grid">
+          <div class="col-12 card reveal">
+            <span class="tag">Reference Capture List</span>
+            <h3>Sources and links used in this portfolio draft</h3>
+            <p>These are captured for transfer into the official coversheet reference section and to track all external links used in content.</p>
+            <!-- BEGIN:references-list -->
+              <ol>
+                <li>Sloman, A. (2026). Cosmic Chronometer (interactive application). https://rexmortus.github.io/cosmic_chronometer/</li>
+                <li>Sloman, A. (2026). Galaxy Brain Infographic (classroom meme-format resource). galaxy_brain.png</li>
+                <li>Sloman, A. (2026). APA7 Challenge (gamification resource). https://alexsoloman173-lgtm.github.io/APA7-challange/</li>
+                <li>Sloman, A. (2026). APA7 Challenge screenshot (gamification resource image). gamification.png</li>
+                <li>YouTube thumbnail image used for The Oregon Trail. https://i.ytimg.com/vi/DwHee12Z_Dg/maxresdefault.jpg</li>
+                <li>Reddit-hosted image used for Midnight Rescue. https://preview.redd.it/1hrjanf2yq811.jpg?auto=webp&amp;s=6c3e02a84d2a6f370c0567dbc50929113f639dbe</li>
+                <li>LaunchBox Games Database image used for Word Munchers. https://images.launchbox-app.com//449d681d-eab7-4a58-8619-f0f95e0c5693.png</li>
+                <li>My Abandonware image used for Designasaurus II. https://www.myabandonware.com/media/screenshots/d/designasaurus-ii-vj/designasaurus-ii_7.png</li>
+                <li>Sloman, A. (2026). Status Cards (classroom formative assessment resource, PDF). status_cards.pdf</li>
+                <li>Sloman, A. (2026). SlideKey (private education-focused slide authoring application). slide_key.png</li>
+                <li>Sloman, A. (2026). Integrated Literacy Diagram (visual model image). Pasted image 20260429100540.png</li>
+                <li>Sloman, A. (2026). Integrated Literacy Diagram (resource PDF). Integrated Literacy Diagram.pdf</li>
+                <li>Holyoak, K. J., and Morrison, R. G. (Eds.). (2005). The Cambridge handbook of thinking and reasoning. Cambridge University Press.</li>
+                <li>Australian Bureau of Statistics. (2024). Occupation Standard Classification for Australia (OSCA). https://www.abs.gov.au/statistics/classifications/occupation-standard-classification-australia-osca</li>
+                <li>Hutton, J. S., Dudley, J., Horowitz-Kraus, T., DeWitt, T., and Holland, S. K. (2019). Associations between screen-based media use and brain white matter integrity in preschool-aged children. JAMA Pediatrics. https://jamanetwork.com/journals/jamapediatrics/fullarticle/2754101</li>
+                <li>Kosmyna, N., Hauptmann, E., Yuan, Y. T., Situ, J., Liao, X.-H., Beresnitzky, A. V., Braunstein, I., and Maes, P. (2025). Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task. arXiv. https://arxiv.org/abs/2506.08872</li>
+                <li>Sparrow, B., Liu, J., and Wegner, D. M. (2011). Google Effects on Memory: Cognitive Consequences of Having Information at Our Fingertips. Science. https://doi.org/10.1126/science.1207745</li>
+                <li>UNESCO. (2023). Guidance for generative AI in education and research. https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research</li>
+                <li>OECD. (2026). OECD Digital Education Outlook 2026. https://www.oecd.org/en/publications/oecd-digital-education-outlook-2026_062a7394-en.html</li>
+                <li>La Trobe University Library. APA 7 guide: Generative AI. https://latrobe.libguides.com/apa7/generativeai</li>
+              </ol>
+            <!-- END:references-list -->
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="foot">
+      <span>Built as a single HTML SPA with embedded styles and scripts.</span>
+      <span>Swiss-inspired layout, responsive design, Lucide icon system.</span>
+    </footer>
+  </main>
+
+  <div class="scroll-hint" id="scrollHint" aria-hidden="true">
+    <div class="scroll-hint-gradient"></div>
+    <div class="scroll-hint-arrows">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script type="module">
+    import * as pretext from "https://cdn.jsdelivr.net/npm/@chenglou/pretext@0.0.7/+esm";
+    window.pretext = pretext;
+  </script>
+  <script>
+    (function () {
+      var views = Array.from(document.querySelectorAll('.view'));
+      var links = Array.from(document.querySelectorAll('[data-route]'));
+      var scrollHint = document.getElementById('scrollHint');
+      var defaultPageTitle = document.title;
+      var resourceDetailTitle = document.getElementById('resourceDetailTitle');
+      var resourceDetailSummary = document.getElementById('resourceDetailSummary');
+      var resourceDetailBody = document.getElementById('resourceDetailBody');
+      var resourceDetailSidebar = document.getElementById('resourceDetailSidebar');
+      var resourceDetailWordCount = document.getElementById('resourceDetailWordCount');
+      var resourcePermalink = document.getElementById('resourcePermalink');
+      var lightbox = document.getElementById('lightbox');
+      var lightboxImage = document.getElementById('lightboxImage');
+      var lightboxCloseBtn = document.querySelector('.lightbox-close');
+      var resourceReflections = Array.from(document.querySelectorAll('.reflection-hidden [data-slug]')).reduce(function (map, reflection) {
+        map[reflection.getAttribute('data-slug')] = reflection;
+        return map;
+      }, {});
+
+      function updateScrollHint() {
+        if (!scrollHint) return;
+
+        var overlayOpen = lightbox && lightbox.classList.contains('active');
+
+        var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        var hasOverflow = maxScroll > 12;
+        var nearBottom = window.scrollY >= Math.max(0, maxScroll - 16);
+        var shouldShow = hasOverflow && !nearBottom && !overlayOpen;
+
+        scrollHint.classList.toggle('visible', shouldShow);
+      }
+
+      function setupMasonryGrid() {
+        // CSS columns handles layout — no JS needed.
+      }
+
+      function openLightbox(imageSrc, imageAlt) {
+        if (!lightbox || !lightboxImage) return;
+        lightboxImage.src = imageSrc;
+        lightboxImage.alt = imageAlt || '';
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        updateScrollHint();
+      }
+
+      function closeLightbox() {
+        if (!lightbox) return;
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        updateScrollHint();
+      }
+
+      function bindLightboxTargets(container) {
+        if (!container) return;
+        Array.from(container.querySelectorAll('img')).forEach(function (img) {
+          if (img.dataset.lightboxBound === 'true') return;
+          img.dataset.lightboxBound = 'true';
+          img.addEventListener('click', function () {
+            openLightbox(img.getAttribute('src'), img.getAttribute('alt'));
+          });
+        });
+      }
+
+      function setupLightbox() {
+        if (!lightbox || !lightboxCloseBtn) return;
+
+        lightboxCloseBtn.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', function (e) {
+          if (e.target === lightbox) closeLightbox();
+        });
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+          }
+        });
+      }
+
+      function resourceRoute(slug) {
+        return 'resources/' + slug;
+      }
+
+      function routeFromHash() {
+        var hash = (location.hash || '#home').slice(1);
+
+        if (hash.indexOf('resources/') === 0) {
+          var slug = hash.slice('resources/'.length);
+          if (resourceReflections[slug]) {
+            return { view: 'resource-detail', slug: slug };
+          }
+          return { view: 'resources' };
+        }
+
+        return views.some(function (v) { return v.id === hash; }) ? { view: hash } : { view: 'home' };
+      }
+
+      function buildResourceSidebar(reflection) {
+        var isAiActivity = reflection.getAttribute('data-slug') === 'ai-activity';
+        var mediaImagesAttr = reflection.getAttribute('data-media-images');
+        var mediaImages = mediaImagesAttr ? mediaImagesAttr.split('|').filter(Boolean) : [];
+        if (!mediaImages.length) {
+          var singleMediaImage = reflection.getAttribute('data-media-image');
+          if (singleMediaImage) {
+            mediaImages = [singleMediaImage];
+          }
+        }
+        var mediaLink = reflection.getAttribute('data-media-link');
+        var mediaLinkText = reflection.getAttribute('data-media-link-text');
+        var mediaDownload = reflection.getAttribute('data-media-download');
+        var mediaDownloadName = reflection.getAttribute('data-media-download-name');
+        var mediaDownloadsAttr = reflection.getAttribute('data-media-downloads');
+        var mediaDownloadNamesAttr = reflection.getAttribute('data-media-download-names');
+        var mediaDownloads = mediaDownloadsAttr ? mediaDownloadsAttr.split('|').filter(Boolean) : [];
+        var mediaDownloadNames = mediaDownloadNamesAttr ? mediaDownloadNamesAttr.split('|').filter(Boolean) : [];
+
+        resourceDetailSidebar.innerHTML = '';
+
+        function setDownloadLabel(linkEl, name) {
+          if (!isAiActivity) {
+            linkEl.textContent = 'Download ' + (name || 'file');
+            return;
+          }
+
+          linkEl.style.display = 'flex';
+          linkEl.style.alignItems = 'center';
+          linkEl.style.justifyContent = 'center';
+          linkEl.style.gap = '0.5rem';
+
+          var icon = document.createElement('i');
+          icon.setAttribute('data-lucide', 'download');
+          icon.setAttribute('aria-hidden', 'true');
+          linkEl.appendChild(icon);
+
+          var textNode = document.createElement('span');
+          textNode.textContent = name || 'file';
+          linkEl.appendChild(textNode);
+        }
+
+        mediaImages.forEach(function (mediaImage) {
+          var imageContainer = document.createElement('div');
+          imageContainer.className = 'modal-media-item';
+          imageContainer.addEventListener('click', function () {
+            openLightbox(mediaImage, 'Resource preview');
+          });
+
+          var img = document.createElement('img');
+          img.className = 'modal-media-thumbnail';
+          img.src = mediaImage;
+          img.alt = 'Resource preview';
+          img.loading = 'eager';
+          imageContainer.appendChild(img);
+
+          var label = document.createElement('div');
+          label.className = 'modal-media-label';
+          label.textContent = 'Click to view';
+          imageContainer.appendChild(label);
+
+          resourceDetailSidebar.appendChild(imageContainer);
+        });
+
+        if (mediaLink) {
+          var linkContainer = document.createElement('a');
+          linkContainer.className = 'modal-download-link';
+          linkContainer.href = mediaLink;
+          linkContainer.target = '_blank';
+          linkContainer.rel = 'noreferrer';
+          linkContainer.textContent = mediaLinkText || 'Open resource';
+          resourceDetailSidebar.appendChild(linkContainer);
+        }
+
+        if (mediaDownload) {
+          var downloadContainer = document.createElement('a');
+          downloadContainer.className = 'modal-download-link';
+          downloadContainer.href = mediaDownload;
+          downloadContainer.download = true;
+          setDownloadLabel(downloadContainer, mediaDownloadName || 'file');
+          resourceDetailSidebar.appendChild(downloadContainer);
+        }
+
+        mediaDownloads.forEach(function (downloadHref, index) {
+          var downloadContainer = document.createElement('a');
+          downloadContainer.className = 'modal-download-link';
+          downloadContainer.href = downloadHref;
+          downloadContainer.download = true;
+          setDownloadLabel(downloadContainer, mediaDownloadNames[index] || 'file');
+          resourceDetailSidebar.appendChild(downloadContainer);
+        });
+
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons({ attrs: { width: 17, height: 17, strokeWidth: 1.8 } });
+        }
+      }
+
+      function renderResourceDetail(slug) {
+        var reflection = resourceReflections[slug];
+        if (!reflection) return;
+
+        var title = reflection.getAttribute('data-title') || 'Resource';
+        var cardTitle = reflection.getAttribute('data-card-title') || title;
+        var summary = reflection.getAttribute('data-summary') || '';
+        var wordCountId = reflection.getAttribute('data-word-count-id');
+        var wordCountSpan = wordCountId ? document.getElementById(wordCountId) : null;
+        var reflectionClone = reflection.cloneNode(true);
+        var hiddenCount = wordCountId ? reflectionClone.querySelector('#' + wordCountId) : null;
+
+        if (hiddenCount) {
+          hiddenCount.remove();
+        }
+
+        resourceDetailTitle.textContent = title;
+        resourceDetailSummary.textContent = summary;
+        resourcePermalink.href = '#' + resourceRoute(slug);
+        resourcePermalink.textContent = 'Permalink';
+        resourcePermalink.setAttribute('aria-label', 'Permalink for ' + cardTitle);
+        resourceDetailWordCount.textContent = wordCountSpan ? wordCountSpan.textContent : '0 words';
+        resourceDetailBody.innerHTML = reflectionClone.innerHTML;
+
+        Array.from(resourceDetailBody.querySelectorAll('img')).forEach(function (img) {
+          img.loading = 'eager';
+        });
+
+        buildResourceSidebar(reflection);
+        bindLightboxTargets(resourceDetailBody);
+        document.title = cardTitle + ' | Professional Portfolio | EDU1003 AT3';
+      }
+
+      function activate(route) {
+        if (route.view === 'resource-detail') {
+          renderResourceDetail(route.slug);
+        } else {
+          document.title = defaultPageTitle;
+        }
+
+        views.forEach(function (view) {
+          view.classList.toggle('active', view.id === route.view);
+        });
+
+        var activeRoute = route.view === 'resource-detail' ? 'resources' : route.view;
+        links.forEach(function (link) {
+          link.classList.toggle('active', link.dataset.route === activeRoute);
+        });
+
+        if (activeRoute === 'resources') {
+          setupMasonryGrid();
+        }
+
+        window.scrollTo(0, 0);
+        setTimeout(updateScrollHint, 0);
+      }
+
+      function countWords(text) {
+        return text.trim().split(/\s+/).filter(Boolean).length;
+      }
+
+      function updateCounts() {
+        var groups = {};
+        Array.from(document.querySelectorAll('.countable')).forEach(function (block) {
+          var id = block.getAttribute('data-count-id');
+          if (!id) return;
+          groups[id] = (groups[id] || 0) + countWords(block.textContent);
+        });
+
+        // Fallback: if a reflection has no countable markers, count its full text.
+        Array.from(document.querySelectorAll('.reflection-hidden [data-word-count-id]')).forEach(function (reflection) {
+          var id = reflection.getAttribute('data-word-count-id');
+          if (!id || groups[id] > 0) return;
+
+          var clone = reflection.cloneNode(true);
+          var hiddenCount = clone.querySelector('#' + id);
+          if (hiddenCount) {
+            hiddenCount.remove();
+          }
+
+          groups[id] = countWords(clone.textContent || '');
+        });
+
+        Object.keys(groups).forEach(function (id) {
+          var target = document.getElementById(id);
+          if (!target) return;
+          target.textContent = groups[id] + ' words';
+        });
+      }
+
+      function setupReveal() {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) entry.target.classList.add('in');
+          });
+        }, { threshold: 0.18 });
+        Array.from(document.querySelectorAll('.reveal')).forEach(function (el) { io.observe(el); });
+      }
+
+      function setupResourceRoutes() {
+        Array.from(document.querySelectorAll('.resource-card[data-slug]')).forEach(function (card) {
+          function openResourcePage() {
+            var slug = card.getAttribute('data-slug');
+            if (!slug) return;
+            location.hash = '#' + resourceRoute(slug);
+          }
+
+          card.addEventListener('click', function (e) {
+            if (e.target.closest('a')) return;
+            openResourcePage();
+          });
+
+          card.addEventListener('keydown', function (e) {
+            if (e.target.closest('a')) return;
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openResourcePage();
+            }
+          });
+        });
+      }
+
+      // Pretext.js text layout system - applies justified text with precise measurement
+      function getComputedFontString(el) {
+        var style = window.getComputedStyle(el);
+        var fontWeight = style.fontWeight || 'normal';
+        var fontSize = style.fontSize;
+        var fontFamily = style.fontFamily;
+        var font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
+        return font;
+      }
+
+      function applyPretextLayout() {
+        if (!window.pretext) return;
+
+        var pretext = window.pretext;
+        if (!pretext.prepare) return;
+
+        var { prepare, layout } = pretext;
+
+        // Apply justified layout to body text and modal elements
+        var textSelectors = [
+          'p:not(.countable)',
+          'h1',
+          'h2',
+          'h3',
+          'li',
+          '.lead',
+          '.profile-caption',
+          '.card span:first-child'
+        ];
+
+        var textElements = [];
+        textSelectors.forEach(function (selector) {
+          Array.from(document.querySelectorAll(selector)).forEach(function (el) {
+            if (textElements.indexOf(el) === -1) {
+              textElements.push(el);
+            }
+          });
+        });
+
+        textElements.forEach(function (el) {
+          if (!el.textContent || !el.textContent.trim()) return;
+
+          try {
+            var fontString = getComputedFontString(el);
+            var prepared = prepare(el.textContent, fontString, { whiteSpace: 'normal' });
+            var containerWidth = el.offsetWidth;
+
+            if (containerWidth > 0) {
+              var style = window.getComputedStyle(el);
+              var lineHeight = parseFloat(style.lineHeight) || 1.5;
+
+              // Calculate layout to find ideal text distribution
+              var layoutResult = layout(prepared, containerWidth, lineHeight);
+
+              // Apply justified text alignment only for multi-line paragraphs
+              if (layoutResult && layoutResult.lineCount > 1) {
+                el.style.textAlign = 'justify';
+                el.style.textAlignLast = 'left';
+                el.style.hyphens = 'auto';
+              }
+            }
+          } catch (e) {
+            // Silently skip if pretext fails for this element
+            console.debug('Pretext layout skip:', el, e);
+          }
+        });
+
+        // Apply to countable reflection elements (both in page and in modal)
+        var countableElements = document.querySelectorAll('.countable');
+        countableElements.forEach(function (el) {
+          if (!el.textContent || !el.textContent.trim()) return;
+
+          try {
+            var fontString = getComputedFontString(el);
+            var prepared = prepare(el.textContent, fontString, { whiteSpace: 'normal' });
+            var containerWidth = el.offsetWidth;
+
+            if (containerWidth > 0) {
+              var style = window.getComputedStyle(el);
+              var lineHeight = parseFloat(style.lineHeight) || 1.68;
+
+              var layoutResult = layout(prepared, containerWidth, lineHeight);
+
+              // Apply justified alignment for better paragraph consistency
+              if (layoutResult && layoutResult.lineCount > 1) {
+                el.style.textAlign = 'justify';
+                el.style.textAlignLast = 'left';
+                el.style.hyphens = 'auto';
+              }
+            }
+          } catch (e) {
+            console.debug('Pretext layout skip on countable:', el, e);
+          }
+        });
+      }
+
+      // Debounced resize handler to re-apply pretext layout
+      var resizeTimeout;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function () {
+          applyPretextLayout();
+          updateScrollHint();
+        }, 250);
+      });
+
+      window.addEventListener('scroll', updateScrollHint, { passive: true });
+      window.addEventListener('load', updateScrollHint);
+
+      window.addEventListener('hashchange', function () {
+        updateCounts();
+        activate(routeFromHash());
+        updateScrollHint();
+      });
+
+      updateCounts();
+      activate(routeFromHash());
+      setupReveal();
+      setupLightbox();
+      setupResourceRoutes();
+      updateScrollHint();
+
+      // Apply pretext layout after fonts are ready
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () {
+          setTimeout(function () {
+            applyPretextLayout();
+            updateScrollHint();
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+              window.lucide.createIcons({ attrs: { width: 17, height: 17, strokeWidth: 1.8 } });
+            }
+          }, 100);
+        });
+      } else {
+        // Fallback: apply after delay
+        setTimeout(function () {
+          applyPretextLayout();
+          updateScrollHint();
+          if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons({ attrs: { width: 17, height: 17, strokeWidth: 1.8 } });
+          }
+        }, 500);
+      }
+    })();
+  </script>
+</body>
+</html>
