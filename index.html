@@ -170,6 +170,47 @@
       padding-bottom: 0.3rem;
     }
 
+    .about-home-hero {
+      margin: 0 0 1.1rem;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: clamp(1.2rem, 3vw, 2rem) 0;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--gap);
+    }
+
+    .about-home-hero h1 {
+      max-width: 18ch;
+      font-size: clamp(1.8rem, 4vw, 3.4rem);
+    }
+
+    .about-home-actions {
+      margin-top: 0.9rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
+    .about-home-actions a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      border: 1px solid var(--ink);
+      padding: 0.42rem 0.62rem;
+      font-size: 0.76rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: all var(--ease);
+      background: #fff;
+    }
+
+    .about-home-actions a:hover {
+      background: var(--ink);
+      color: #fff;
+    }
+
     .views {
       position: relative;
       min-height: 56vh;
@@ -1118,6 +1159,7 @@
 
     @media (max-width: 940px) {
       .hero { grid-template-columns: 1fr; }
+      .about-home-hero { grid-template-columns: 1fr; }
       .col-8, .col-6, .col-4 { grid-column: span 12; }
       .topbar-inner { align-items: flex-start; flex-direction: column; }
       .resources-masonry { columns: 1; }
@@ -1177,7 +1219,6 @@
         <span>EDU1003 Portfolio</span>
       </div>
       <nav class="nav" aria-label="Primary navigation">
-        <a href="#home" data-route="home">Home</a>
         <a href="#about" data-route="about">About Me</a>
         <a href="#blog" data-route="blog">Blog</a>
         <a href="#resources" data-route="resources">Resources</a>
@@ -1188,37 +1229,7 @@
 
   <main class="shell">
     <section class="views">
-      <article class="view active" id="home">
-        <section class="hero reveal">
-          <div>
-            <div class="kicker">Professional Portfolio Website</div>
-            <h1>Teaching with clarity, care, and digital intention.</h1>
-            <p class="lead">
-              This single-page portfolio presents my growth as a pre-service teacher across professional identity, critical digital literacy, and classroom-focused design. It follows AT3 requirements with an emphasis on accessible structure, ethical referencing, and practical resource creation.
-            </p>
-          </div>
-          <aside class="metrics" aria-label="Assessment overview">
-            <div class="metric"><span>Task</span><strong>AT3</strong></div>
-            <div class="metric"><span>Word Target</span><strong>~2000</strong></div>
-            <div class="metric"><span>Format</span><strong>SPA</strong></div>
-            <div class="metric"><span>Status</span><strong>Submission-ready</strong></div>
-          </aside>
-        </section>
-        <div class="grid">
-          <div class="col-6 card reveal">
-            <span class="tag">Scope</span>
-            <h3>What this website includes</h3>
-            <p>About Me (professional profile), one critical blog post, and seven educational resources with linked critical reflections. Each section is designed for quick navigation and clear reading on desktop and mobile.</p>
-          </div>
-          <div class="col-6 card reveal">
-            <span class="tag">Design Logic</span>
-            <h3>Swiss-inspired visual system</h3>
-            <p>The site uses strict grid rhythm, concise typography, restrained color contrast, and high-legibility spacing. Content blocks are modular so assessment evidence is easy to locate and verify against rubric criteria.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="view" id="about">
+      <article class="view active" id="about">
         <header class="page-head reveal section-head-light">
           <div class="section-head-light-topline">
             <span class="tag">Profile</span>
@@ -1229,6 +1240,23 @@
             <p>Professional identity and reflective teaching journey.</p>
           </div>
         </header>
+        <section class="about-home-hero reveal" aria-label="About landing summary">
+          <div>
+            <div class="kicker">Professional Portfolio Website</div>
+            <h1>Alec Sloman | Pre-service Teacher</h1>
+            <p class="lead">This portfolio documents my teaching identity, design priorities, and classroom-focused resource development for EDU1003 AT3.</p>
+            <div class="about-home-actions">
+              <a href="#resources"><i data-lucide="library-big"></i> View Resources</a>
+              <a href="#blog"><i data-lucide="notebook-pen"></i> Read Blog</a>
+            </div>
+          </div>
+          <aside class="metrics" aria-label="Portfolio snapshot">
+            <div class="metric"><span>Role</span><strong>PST</strong></div>
+            <div class="metric"><span>Focus</span><strong>Tech & Design</strong></div>
+            <div class="metric"><span>Resources</span><strong>7 + extras</strong></div>
+            <div class="metric"><span>Status</span><strong>Active portfolio</strong></div>
+          </aside>
+        </section>
         <div class="grid">
           <div class="col-8 card reveal">
             <span class="tag">About Me</span>
@@ -1846,7 +1874,7 @@
       }
 
       function routeFromHash() {
-        var hash = (location.hash || '#home').slice(1);
+        var hash = (location.hash || '#about').slice(1);
 
         if (hash.indexOf('resources/') === 0) {
           var slug = hash.slice('resources/'.length);
@@ -1856,7 +1884,7 @@
           return { view: 'resources' };
         }
 
-        return views.some(function (v) { return v.id === hash; }) ? { view: hash } : { view: 'home' };
+        return views.some(function (v) { return v.id === hash; }) ? { view: hash } : { view: 'about' };
       }
 
       function buildResourceSidebar(reflection) {
