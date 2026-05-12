@@ -361,7 +361,6 @@ def render_about_sidebar() -> str:
     meta, _ = parse_frontmatter(CONTENT_DIR / "about.md")
     return "\n".join(
         [
-            f'<span class="tag">{text(meta.get("sidebar_tag", "Professional Focus"))}</span>',
             '<img',
             '  class="profile-photo"',
             f'  src="{attr(meta.get("portrait_src", ""))}"',

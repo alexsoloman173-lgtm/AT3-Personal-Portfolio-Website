@@ -48,7 +48,7 @@
       background-image:
         linear-gradient(var(--grid-line) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-      background-size: 32px 32px;
+      background-size: 54px 54px;
       background-position: -1px -1px;
     }
 
@@ -153,35 +153,34 @@
     }
 
     .metrics {
-      border: 1px solid var(--ink);
-      background: #fff8;
-      padding: 0.8rem;
+      border: 1px solid var(--line);
+      background: #fffc;
+      padding: 0.9rem;
       align-self: end;
       display: grid;
-      gap: 0.55rem;
-      font-size: 0.88rem;
+      gap: 0.35rem;
+      font-size: 0.82rem;
     }
 
     .metric {
       display: flex;
       justify-content: space-between;
       gap: 1rem;
-      border-bottom: 1px dotted var(--line);
-      padding-bottom: 0.3rem;
+      padding: 0.18rem 0;
     }
 
     .about-home-hero {
       margin: 0 0 1.1rem;
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      padding: clamp(1.2rem, 3vw, 2rem) 0;
+      border: 1px solid var(--line);
+      background: #fffc;
+      padding: clamp(1.2rem, 3vw, 1.8rem) clamp(0.9rem, 2vw, 1.2rem);
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: var(--gap);
     }
 
     .about-home-hero h1 {
-      max-width: 18ch;
+      max-width: 20ch;
       font-size: clamp(1.8rem, 4vw, 3.4rem);
     }
 
@@ -1230,20 +1229,10 @@
   <main class="shell">
     <section class="views">
       <article class="view active" id="about">
-        <header class="page-head reveal section-head-light">
-          <div class="section-head-light-topline">
-            <span class="tag">Profile</span>
-            <span class="section-head-light-note">Identity and Direction</span>
-          </div>
-          <div class="section-head-light-titleblock">
-            <h2>About Me</h2>
-            <p>Professional identity and reflective teaching journey.</p>
-          </div>
-        </header>
         <section class="about-home-hero reveal" aria-label="About landing summary">
           <div>
             <div class="kicker">Professional Portfolio Website</div>
-            <h1>Alec Sloman | Pre-service Teacher</h1>
+            <h1>Alec Sloman | Pre Service Teacher</h1>
             <p class="lead">This portfolio documents my teaching identity, design priorities, and classroom-focused resource development for EDU1003 AT3.</p>
             <div class="about-home-actions">
               <a href="#resources"><i data-lucide="library-big"></i> View Resources</a>
@@ -1259,10 +1248,9 @@
         </section>
         <div class="grid">
           <div class="col-8 card reveal">
-            <span class="tag">About Me</span>
             <div class="word-chip"><i data-lucide="file-text"></i> <span id="aboutCount">0 words</span></div>
             <!-- BEGIN:about-content -->
-              <p class="countable" data-count-id="aboutCount">My name is Alec Sloman, and I am a pre-service teacher at La Trobe University. I came to teaching through a difficult personal experience of schooling. As a student, I was socially awkward, often disengaged, and uncertain about the purpose of what I was being asked to learn. Over time, that frustration became open resistance, and I know now that I made life hard for teachers who were trying to help. Looking back with more maturity, I do not see that period as evidence that I was incapable of learning. I see it as evidence of how easily students can be disconnected when school feels like compliance instead of growth. That perspective now shapes my professional identity: I want to create classrooms where students who feel alienated still have a clear pathway back into learning.</p>
+              <p class="countable" data-count-id="aboutCount">My name is Alec Sloman, and I am a pre-service teacher at La Trobe University. I came to teaching through a difficult personal experience of schooling. As a student, I was socially awkward, often disengaged, and uncertain about the purpose of what I was being asked to learn. Over time, that frustration became open resistance, and I know now that I made life hard for teachers who were trying to help. Looking back with more maturity, I see my experience as evidence of how easily students can be disconnected when school feels like compliance instead of growth. That perspective now shapes my professional identity: I want to create classrooms where students who feel alienated still have a clear pathway back into learning.</p>
               <p class="countable" data-count-id="aboutCount">My schooling years coincided with an era where high-stakes testing strongly influenced classroom practice. In many subjects, learning felt narrowed to test preparation, while curiosity, creativity, and critical thinking seemed secondary. Even when individual teachers attempted to connect learning to my interests, the wider system constrained what was possible. I often felt reduced to performance data rather than seen as a developing person. I never completed high school in the traditional pathway, instead earning a GED and later moving to Australia to study Music Production at TAFE. Although I cared deeply about music, I still struggled because I had not yet learned how to learn effectively. Completing that course was important, but it did not immediately restore my confidence in formal education. At the time, I believed self-directed learning was my only viable option.</p>
               <p class="countable" data-count-id="aboutCount">Teaching myself software development changed that trajectory. Programming gave me structure, autonomy, and visible progress, and it opened a twenty-year career across IT and software development. For the first time, learning felt empowering because effort produced tangible outcomes. After many years in industry, however, I began to want work that was more directly meaningful. An unexpected opportunity to teach a software development boot camp became a turning point. Despite having no formal teacher training at the time, I discovered that supporting learners was the most purposeful work I had done. I loved helping people move from uncertainty to competence, and I was especially motivated by students who doubted their own ability. That experience confirmed that education was not something I needed to avoid; it was where my professional strengths and personal values could meet.</p>
               <p class="countable" data-count-id="aboutCount">As I prepare to become a secondary teacher, I bring an interdisciplinary background in software development, music production, and carpentry. I aim to teach technology and design, while also engaging my interests in history and civics to build broad, connected learning experiences. My teaching goal is to combine high expectations with practical support: clear success criteria, authentic tasks, and explicit instruction in how to learn, not just what to produce. I am particularly committed to helping students who feel out of place in school, because I understand that experience firsthand. In my classroom, digital tools should expand access and agency rather than distract from learning. Ultimately, I want to help young people find direction earlier than I did, develop confidence in their own capabilities, and leave school with both knowledge and a sense of possibility.</p>
@@ -1271,7 +1259,6 @@
 
           <aside class="col-4 card reveal">
             <!-- BEGIN:about-sidebar -->
-              <span class="tag">Professional Focus</span>
               <img
                 class="profile-photo"
                 src="resources/alec_sloman.jpeg"
