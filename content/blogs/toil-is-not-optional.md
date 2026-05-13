@@ -18,7 +18,7 @@ Recently while browsing the internet, I was served an ad by Anthropic—the crea
 
 Much of the routine burden of software development—repeating familiar patterns, tracking down elusive bugs, maintaining documentation, and managing dependencies—is being reduced at a rapid pace.
 
-While toil in software development is increasingly viewed as a liability to be minimised, with education it's a different story because toil plays a completely different role. Far from being a liability, it is formative. It is indispensable. The effort involved in grappling with material is inseperable from the biological processes through which understanding is built. When that struggle is offloaded, we remove the conditions under which learning can occur and mastery can develop.
+While toil in software development is increasingly viewed as a liability to be minimised, with education it's a different story because toil plays a completely different role. Far from being a liability, it is formative. It is indispensable. The effort involved in grappling with material is inseparable from the biological processes through which understanding is built. When that struggle is offloaded, we remove the conditions under which learning can occur and mastery can develop.
 
 [A 2025 study](https://www.media.mit.edu/publications/your-brain-on-chatgpt/) from the MIT Media Lab on AI-assisted writing found clear differences in brain activity<sup>1</sup>:
 
