@@ -5,6 +5,8 @@ import re
 from pathlib import Path
 from urllib.parse import unquote
 from typing import Dict, List, Tuple
+from html.parser import HTMLParser
+from math import ceil
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT_DIR = ROOT / "content"
@@ -69,6 +71,101 @@ ORDERED_RE = re.compile(r"^\s*\d+\.\s+(.*)$")
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
 SLUG_RE = re.compile(r"[^a-z0-9]+")
 HTML_BLOCK_TAG_RE = re.compile(r"^</?(?:div|iframe|section|article|aside|figure|figcaption|video|audio|details|summary|pre|code|table|thead|tbody|tr|td|th|ul|ol|li|blockquote|h[1-6])(?:\s|>|$)", re.IGNORECASE)
+READING_SPEED_WPM = 220
+
+
+class StatsParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.frames: List[Dict[str, object]] = []
+        self.countable_words: Dict[str, List[str]] = {}
+        self.reflection_words: Dict[str, List[str]] = {}
+
+    def handle_starttag(self, tag: str, attrs_list: List[Tuple[str, str | None]]) -> None:
+        attrs = {name: (value or "") for name, value in attrs_list}
+        parent = self.frames[-1] if self.frames else {"skip": False, "count_id": None, "reflection_id": None}
+
+        count_id = parent["count_id"]
+        classes = attrs.get("class", "").split()
+        data_count_id = attrs.get("data-count-id")
+        if "countable" in classes and data_count_id:
+            count_id = data_count_id
+
+        reflection_id = parent["reflection_id"]
+        if attrs.get("data-word-count-id"):
+            reflection_id = attrs["data-word-count-id"]
+
+        skip = bool(parent["skip"] or tag in {"script", "style"})
+        hidden_count_span = bool(tag == "span" and reflection_id and attrs.get("id") == reflection_id)
+
+        self.frames.append(
+            {
+                "skip": skip,
+                "count_id": count_id,
+                "reflection_id": reflection_id,
+                "hidden_count_span": hidden_count_span,
+            }
+        )
+
+    def handle_endtag(self, tag: str) -> None:
+        if self.frames:
+            self.frames.pop()
+
+    def handle_data(self, data: str) -> None:
+        if not self.frames:
+            return
+
+        frame = self.frames[-1]
+        if frame["skip"] or frame["hidden_count_span"]:
+            return
+
+        count_id = frame["count_id"]
+        if count_id:
+            self.countable_words.setdefault(str(count_id), []).append(data)
+
+        reflection_id = frame["reflection_id"]
+        if reflection_id:
+            self.reflection_words.setdefault(str(reflection_id), []).append(data)
+
+
+def count_words(text_value: str) -> int:
+    return len([token for token in re.split(r"\s+", text_value.strip()) if token])
+
+
+def format_reading_label(words: int) -> str:
+    word_label = "word" if words == 1 else "words"
+    minutes = max(1, ceil(words / READING_SPEED_WPM)) if words else 0
+    minute_label = "min" if minutes == 1 else "mins"
+    return f"{words} {word_label} · {minutes} {minute_label} read"
+
+
+def build_word_counts_label_map(html_source: str) -> Dict[str, str]:
+    parser = StatsParser()
+    parser.feed(html_source)
+
+    counts: Dict[str, int] = {
+        count_id: count_words(" ".join(chunks))
+        for count_id, chunks in parser.countable_words.items()
+    }
+
+    for reflection_id, chunks in parser.reflection_words.items():
+        if counts.get(reflection_id, 0) > 0:
+            continue
+        counts[reflection_id] = count_words(" ".join(chunks))
+
+    return {count_id: format_reading_label(total) for count_id, total in counts.items()}
+
+
+def apply_word_count_labels(html_source: str, labels: Dict[str, str]) -> str:
+    span_re = re.compile(r'<span(?P<attrs>[^>]*\sid="(?P<id>[^"]+)"[^>]*)>(?P<content>[^<]*)</span>')
+
+    def replace_span(match: re.Match[str]) -> str:
+        count_id = match.group("id")
+        if count_id not in labels:
+            return match.group(0)
+        return f'<span{match.group("attrs")}>{text(labels[count_id])}</span>'
+
+    return span_re.sub(replace_span, html_source)
 
 
 def is_external_url(src: str) -> bool:
@@ -566,6 +663,9 @@ def build() -> None:
 
     for name, markup in regions.items():
         source = replace_region(source, name, markup)
+
+    word_count_labels = build_word_counts_label_map(source)
+    source = apply_word_count_labels(source, word_count_labels)
 
     INDEX_FILE.write_text(source, encoding="utf-8", newline="\n")
 

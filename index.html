@@ -98,6 +98,7 @@
     }
 
     .nav a {
+      --nav-accent: #8f8f8f;
       text-decoration: none;
       border: 1px solid transparent;
       padding: 0.42rem 0.6rem;
@@ -108,11 +109,22 @@
       transition: all var(--ease);
     }
 
+    .nav a[data-route="about"] { --nav-accent: #d26f78; }
+    .nav a[data-route="blog"] { --nav-accent: #cf8a52; }
+    .nav a[data-route="resources"] { --nav-accent: #9ca95b; }
+    .nav a[data-route="references"] { --nav-accent: #6f9ecf; }
+    .nav a[data-route="contact"] { --nav-accent: #9877c8; }
+
     .nav a.active,
     .nav a:hover {
       color: var(--ink);
-      border-color: var(--ink);
-      background: #ffffff8f;
+      border-color: color-mix(in srgb, var(--nav-accent) 40%, var(--ink) 60%);
+      background: color-mix(in srgb, var(--nav-accent) 14%, #ffffff 86%);
+    }
+
+    .nav a.active {
+      border-color: color-mix(in srgb, var(--nav-accent) 58%, var(--ink) 42%);
+      background: color-mix(in srgb, var(--nav-accent) 20%, #ffffff 80%);
     }
 
     .hero {
@@ -217,10 +229,50 @@
     }
 
     .view {
+      --section-accent: #9a9a9a;
       display: none;
       animation: rise 420ms ease forwards;
       opacity: 0;
       transform: translateY(12px);
+    }
+
+    #about { --section-accent: #d26f78; }
+    #blog { --section-accent: #cf8a52; }
+    #resources { --section-accent: #9ca95b; }
+    #references { --section-accent: #6f9ecf; }
+    #contact { --section-accent: #9877c8; }
+
+    .view .page-head {
+      border-bottom-color: color-mix(in srgb, var(--section-accent) 28%, var(--line) 72%);
+    }
+
+    .view .card {
+      border-color: color-mix(in srgb, var(--section-accent) 16%, var(--line) 84%);
+    }
+
+    .view .tag {
+      border-color: color-mix(in srgb, var(--section-accent) 35%, var(--ink) 65%);
+      background: color-mix(in srgb, var(--section-accent) 12%, #ffffff 88%);
+    }
+
+    .view .word-chip {
+      border-color: color-mix(in srgb, var(--section-accent) 26%, var(--line) 74%);
+      background: color-mix(in srgb, var(--section-accent) 10%, #ffffff 90%);
+    }
+
+    .view .kicker {
+      color: color-mix(in srgb, var(--section-accent) 55%, var(--muted) 45%);
+    }
+
+    .view .about-home-actions a {
+      border-color: color-mix(in srgb, var(--section-accent) 42%, var(--ink) 58%);
+      background: color-mix(in srgb, var(--section-accent) 8%, #ffffff 92%);
+    }
+
+    .view .about-home-actions a:hover {
+      background: color-mix(in srgb, var(--section-accent) 76%, var(--ink) 24%);
+      border-color: color-mix(in srgb, var(--section-accent) 62%, var(--ink) 38%);
+      color: #fff;
     }
 
     .view.active { display: block; }
@@ -1215,13 +1267,14 @@
     <div class="topbar-inner">
       <div class="brand">
         <i data-lucide="layout-grid" aria-hidden="true"></i>
-        <span>Alec Sloman | Pre Service Teacher</span>
+        <span>Alec Sloman | Pre-Service Teacher</span>
       </div>
       <nav class="nav" aria-label="Primary navigation">
         <a href="#about" data-route="about">About Me</a>
         <a href="#blog" data-route="blog">Blog</a>
         <a href="#resources" data-route="resources">Resources</a>
         <a href="#references" data-route="references">References</a>
+        <a href="#contact" data-route="contact">Contact</a>
       </nav>
     </div>
   </header>
@@ -1246,7 +1299,7 @@
         </section>
         <div class="grid">
           <div class="col-8 card reveal">
-            <div class="word-chip"><i data-lucide="file-text"></i> <span id="aboutCount">0 words</span></div>
+            <div class="word-chip"><i data-lucide="file-text"></i> <span id="aboutCount">525 words · 3 mins read</span></div>
             <!-- BEGIN:about-content -->
               <p class="countable" data-count-id="aboutCount">My name is Alec Sloman, and I am a pre-service teacher at La Trobe University. I came to teaching through a difficult personal experience of schooling. As a student, I was socially awkward, often disengaged, and uncertain about the purpose of what I was being asked to learn. Over time, that frustration became open resistance, and I know now that I made life hard for teachers who were trying to help. Looking back with more maturity, I see my experience as evidence of how easily students can be disconnected when school feels like compliance instead of growth. That perspective now shapes my professional identity: I want to create classrooms where students who feel alienated still have a clear pathway back into learning.</p>
               <p class="countable" data-count-id="aboutCount">My schooling years coincided with an era where high-stakes testing strongly influenced classroom practice. In many subjects, learning felt narrowed to test preparation, while curiosity, creativity, and critical thinking seemed secondary. Even when individual teachers attempted to connect learning to my interests, the wider system constrained what was possible. I often felt reduced to performance data rather than seen as a developing person. I never completed high school in the traditional pathway, instead earning a GED and later moving to Australia to study Music Production at TAFE. Although I cared deeply about music, I still struggled because I had not yet learned how to learn effectively. Completing that course was important, but it did not immediately restore my confidence in formal education. At the time, I believed self-directed learning was my only viable option.</p>
@@ -1288,13 +1341,13 @@
         <div class="grid">
           <div class="col-8 card reveal">
             <span class="tag">Blog Post</span>
-            <div class="word-chip"><i data-lucide="pen-line"></i> <span id="blogCount">0 words</span></div>
+            <div class="word-chip"><i data-lucide="pen-line"></i> <span id="blogCount">779 words · 4 mins read</span></div>
             <!-- BEGIN:blog-content -->
               <h3>For Learning, Toil is Not Optional</h3>
               <p class="countable" data-count-id="blogCount">Alec Sloman</p>
               <p class="countable" data-count-id="blogCount">Recently while browsing the internet, I was served an ad by Anthropic—the creators of Claude— which claimed that "toil is optional." Ordinarily I ignore sensationalist PR slop, but as a software developer I recognise that it is not entirely hyperbole. As of late 2025, coding agents such as Claude Code and Github Copilot demonstrate capabilities that would have been difficult to fathom even a few years ago.</p>
               <p class="countable" data-count-id="blogCount">Much of the routine burden of software development—repeating familiar patterns, tracking down elusive bugs, maintaining documentation, and managing dependencies—is being reduced at a rapid pace.</p>
-              <p class="countable" data-count-id="blogCount">In that sense, toil in software development is increasingly viewed as a liability to be minimised, and while there are arguments for and against, in education it's a different story because toil plays a completely different role. Far from being a liability, it is formative. It is indispensable. The effort involved in grappling with material is inseperable from the biological processes through which understanding is built. When that struggle is offloaded, we remove the conditions under which learning can occur and mastery can develop.</p>
+              <p class="countable" data-count-id="blogCount">While toil in software development is increasingly viewed as a liability to be minimised, with education it's a different story because toil plays a completely different role. Far from being a liability, it is formative. It is indispensable. The effort involved in grappling with material is inseperable from the biological processes through which understanding is built. When that struggle is offloaded, we remove the conditions under which learning can occur and mastery can develop.</p>
               <p class="countable" data-count-id="blogCount"><a href="https://www.media.mit.edu/publications/your-brain-on-chatgpt/" target="_blank" rel="noreferrer">A 2025 study</a> from the MIT Media Lab on AI-assisted writing found clear differences in brain activity<sup>1</sup>:</p>
               <blockquote>
                 <p class="countable" data-count-id="blogCount">EEG revealed significant differences in brain connectivity: Brain-only participants exhibited the strongest, most distributed networks; search engine users showed moderate engagement; and LLM users displayed the weakest connectivity.</p>
@@ -1503,7 +1556,7 @@
         <div class="reflection-hidden">
           <!-- BEGIN:resource-reflections -->
             <div id="reflection-1" data-resource="1" data-slug="infographic" data-title="Resource 1: Infographic (Week 3)" data-card-title="Infographic" data-summary="A collection of memes that discuss LLMs in education" data-word-count-id="ref1Count" data-media-images="resources/clown_meme.png|resources/principal_skinner_meme.png|resources/salesman_meme.png">
-              <span id="ref1Count" style="display: none;">0 words</span>
+              <span id="ref1Count" style="display: none;">425 words · 2 mins read</span>
               <p class="countable" data-count-id="ref1Count">When I started studying education at La Trobe University, I did not fully anticipate how indispensable information design was to the practice of teaching. In retrospect, of course it makes perfect sense, but still, I was initially astonished by the breadth and depth of just this one field. Case in point, through researching the terms "chartjunk" and "hairball diagram" I encountered the eccentric and arcane works of <a href="https://www.edwardtufte.com/" target="_blank" rel="noreferrer">Edward Tufte</a> - and have enjoyed reading those tremendously.</p>
               <p class="countable" data-count-id="ref1Count">Now, although we were instructed to design a traditional infographic, I made the conscious and admittedly risky (from a marking perspective) decision to make a collection of memes instead. What's more, I did so on the basis of my own preferences <em>and</em> of a single conversation with a friend and mentee who recently completed highschool. I asked them about the teachers who had the most enduring impact, and what specifically made the difference. To my delight, they cited the use of <em>image format memes</em>. Relating this to my own experience: I remember <em>many</em> memes but very <em>few</em> infographics. To keep the final product clear and easy to understand, I constrained each meme to one claim, used familiar meme templates, and paired each visual with explanatory text so the meaning was clear even if the joke did not land.</p>
               <p class="countable" data-count-id="ref1Count">For the topic I elaborated on my blog post which discusses an article by the MIT Media Lab called "<a href="https://www.media.mit.edu/projects/your-brain-on-chatgpt/overview/" target="_blank" rel="noreferrer">Your Brain on ChatGPT</a>", and while I wrote about this on the LMS forum I wanted to illustrate some key aspects of my reflection in various meme formats to test the theory of whether they would be impactful. I also arranged the memes in a deliberate sequence: first, the false promise of "toil is optional" (time and effort); second, epistemic reliability (fabricated citations); third, systemic consequences (assessment integrity and the learner-teacher arms race). And while I believe that the memes speak for themselves - and they got good play on Reddit - my commentary now sits directly below the images.</p>
@@ -1523,7 +1576,7 @@
             </div>
 
             <div id="reflection-2" data-resource="2" data-slug="gamification" data-title="Gamifying APA7: Learning from the Computer Lab Era" data-card-title="Gamification" data-summary="Browser-based APA7 referencing game inspired by classic computer lab serious games." data-word-count-id="ref2Count" data-media-images="resources/gamification.png" data-media-link="https://alexsoloman173-lgtm.github.io/APA7-challange/" data-media-link-text="Open APA7 challenge">
-              <span id="ref2Count" style="display: none;">0 words</span>
+              <span id="ref2Count" style="display: none;">520 words · 3 mins read</span>
               <p>Growing up in the 80's and 90's, I recall with great fondness the educational software of the so-called "computer lab" era. Therefore, for the gamification resource, I chose to follow in the footsteps of classic games such as Word Munchers, Midnight Rescue, and the Oregon Trail to develop a browser-based learning game that helps the player memorize the APA7 reference style. The game, called "APA7 Challenge", can be found at the following URL: <a href="https://alexsoloman173-lgtm.github.io/APA7-challange/" target="_blank" rel="noreferrer">https://alexsoloman173-lgtm.github.io/APA7-challange/</a></p>
               <p>The game employs a <em>falling tiles</em> style ala. <em>Tetris</em>: under time pressure from falling "reference fragments" the player must identify and arrange a complete APA7 reference before the timer runs out. As they correctly identify and assemble reference components, the player accumulates points, with higher scores awarded for accuracy and speed. In other words, the core gamification elements are time pressure, score accumulation, performance-based rewards, immediate feedback on correct assembly, and a clear win/lose condition. The core learning mechanic is still sheer repetition: where through repeated, interactive exposure to the component categories of the APA7 reference style, the learner can quickly master the format.</p>
               <p>This topic was strongly related to my AT1 and AT2 submissions. In my AT1 submission, I assessed two research papers on game-based learning, the main takeaway being that although it has a long and storied history, rigorous research into its effectiveness - especially with regards long-term learning outcomes - is fragmented and spotty. Our group AT2 submission extended this research, exploring how teachers could best understand and implement game-based learning: not as a silver bullet to motivate disengaged learners, but as a highly targeted activity where low-stakes decision making and/or repetition are important aspects of the learning topic. That rationale is exactly why I selected these mechanics: the objective here was not broad conceptual inquiry, but procedural fluency with APA7 reference structure, and timed assembly plus scoring keeps students engaged while forcing repeated recall of the correct sequence and components.</p>
@@ -1532,7 +1585,7 @@
             </div>
 
             <div id="reflection-3" data-resource="3" data-slug="ai-activity" data-title="Resource 3: AI Activity (Week 8)" data-card-title="AI Activity" data-summary="A study of LLM-generated lesson plans." data-word-count-id="ref3Count" data-media-images="resources/lesson_plan.png" data-media-downloads="resources/Lesson%20Planning%20Is%20Not%20a%20Prompting%20Problem.pdf|resources/Introducing%20Linear%20Equations%20%28one-shot%29.pdf|resources/Introducing%20Linear%20Equations%20%28with%20harness%29.pdf" data-media-download-names="Lesson Planning Is Not a Prompting Problem|Introducing Linear Equations (one-shot)|Introducing Linear Equations (with harness)">
-              <span id="ref3Count" style="display: none;">0 words</span>
+              <span id="ref3Count" style="display: none;">453 words · 3 mins read</span>
               <p class="countable" data-count-id="ref3Count">Developing this resource was both fun and interesting. As an expert in software development and a close follower of deep learning applications, I came in with a pretty serious advantages. It also happens that I built a lesson plan generator in week 2 of the course - integrated into my slide authoring tool SlideKey (see the resource for more information) - just for fun! So I'd already learned quite a lot about how to apply LLMs to this specific task, and had a battle-tested architecture ready to go.</p>
               <p class="countable" data-count-id="ref3Count">Thus, my approach was just to rebuild it, with an LLM-coding agent, with a minimum of prompts. I then asked the agent to write a blog post - from its own perspective and in its own words - analyzing the problem space, describing our solution, and comparing the outputs of our "harness" versus "one-shot" prompt. I have to say: reading the agent's post was delightful.</p>
               <p class="countable" data-count-id="ref3Count">The result is far from perfect, and the artifact that it ultimately generated could use a lot more work. But for 10 prompts - plus an 11th for the blog post - I am pleased with the result. Start by reading the download called "Lesson Planning is Not a Prompting Problem", and then look at the one-shot and harness versions of the lesson plan.</p>
@@ -1553,28 +1606,28 @@
             </div>
 
             <div id="reflection-4" data-resource="4" data-slug="cosmic-chronometer" data-title="Resource 4: Cosmic Chronometer (Application Build)" data-card-title="Cosmic Chronometer" data-summary="Interactive app for cosmic expansion visualization." data-word-count-id="ref4Count" data-media-images="resources/chronometer_screenshot.png" data-media-link="https://rexmortus.github.io/cosmic_chronometer/" data-media-link-text="Open interactive app">
-              <span id="ref4Count" style="display: none;">0 words</span>
+              <span id="ref4Count" style="display: none;">332 words · 2 mins read</span>
               <p class="countable" data-count-id="ref4Count">During the months between enrolment and commencement, I had some time to kill and decided to brush up on astrophysics: the <em>cosmological redshift</em> in particular. For those who aren't familiar, it's in the same category as the doppler effect - which I love for its eminent observability. No experiment or special instruments required: just the sound of the ambulance siren pitching up as it approaches, and pitching down as it drives away, the pressure wave compressed by forward motion and elongated by backward motion.</p>
               <p class="countable" data-count-id="ref4Count">Now, one of the first things that you learn in modern cosmology is about the expanding nature of the universe. Despite appearances, everything in the universe is, in fact, moving away from <em>everything</em> else. The space between objects is <em>itself</em> expanding. But when you look out at the stars, you can't see this with the naked eye. In this regard, it's quite unlike the doppler effect because you need special instruments to observe it. But, the same principle applies because as light travels through space - and the space itself expands - the emitter is moving away from the observer, and if we transfer principles from sound to light - and they are both waves - then we should expect the light to "pitch down" and change wavelength: the <em>cosmological redshift.</em> And of course, it does exactly that.</p>
               <p class="countable" data-count-id="ref4Count">But again, it's not observable to the naked eye, and therefore you may find yourself a bit lost trying to fathom it. And this is why I built the <em>cosmic chronometer</em>. I wanted to develop a visualization that communicated the relationship between space and time - mediated by the lightspeed constant - to show the cosmic inflation <em>intuitively</em>. I don't know how I did. It is a work in progress. I recognize that while it can answer questions, it doesn't supply them. Pedagogical scaffolds are missing. But, I'm proud of it, and for that reason I think it deserves a place in my portfolio of educational design work.</p>
             </div>
 
             <div id="reflection-5" data-resource="5" data-slug="status-cards" data-title="Resource 5: Status Cards (Formative Assessment Tool)" data-card-title="Status Cards" data-summary="Formative assessment tool for classroom feedback." data-word-count-id="ref5Count" data-media-images="resources/status_cards.png" data-media-download="resources/status_cards.pdf" data-media-download-name="Status Cards PDF">
-              <span id="ref5Count" style="display: none;">0 words</span>
+              <span id="ref5Count" style="display: none;">314 words · 2 mins read</span>
               <p class="countable" data-count-id="ref5Count">I designed this resource to solve a common classroom problem: teachers often ask "Any questions?" and receive little reliable information about who is following the lesson. Status Cards create immediate, non-optional feedback from every student, not just the most vocal or confident. By asking all learners to indicate a status color at key checkpoints, I can quickly identify patterns of understanding and confusion across the whole room. This makes instructional response more equitable and evidence-based, because I am acting on class-wide data rather than assumptions. The card format is simple, fast, and low-tech, which makes it practical for routine use without interrupting lesson momentum.</p>
               <p class="countable" data-count-id="ref5Count">A second purpose is metacognitive: the cards prompt students to ask themselves, "How well do I understand this right now?" That self-check matters because many learners move through lessons passively unless prompted to monitor comprehension. By embedding this reflection as a normal classroom routine, students practice judging their own understanding and identifying when they need support. Over time, this can strengthen self-regulation and help students take more responsibility for their learning. From a design perspective, the color system supports rapid interpretation for both students and teacher, while the clear labels reduce ambiguity in how each status should be used.</p>
               <p class="countable" data-count-id="ref5Count">The third function is communication quality. If students select green, they are prompted to briefly demonstrate learning; if they select yellow, red, or grey, they are prompted to articulate uncertainty, confusion, or missing information. This shifts classroom talk from vague confidence statements to actionable evidence. Critically, the tool still requires strong facilitation to avoid superficial responses, so my next improvement would be adding sentence stems and exemplar responses for each color. I would also track repeated status patterns over several lessons to inform differentiation and targeted reteaching. Overall, this resource shows how a simple digital/print tool can be used creatively and effectively to improve formative assessment, student voice, and instructional decision-making.</p>
             </div>
 
             <div id="reflection-6" data-resource="6" data-slug="slidekey" data-title="Resource 6: SlideKey (Education-Focused Slide Authoring App)" data-card-title="SlideKey" data-summary="Text-first slide authoring tool with built-in educational design frameworks." data-word-count-id="ref6Count" data-media-images="resources/slide_key.png">
-              <span id="ref6Count" style="display: none;">0 words</span>
+              <span id="ref6Count" style="display: none;">350 words · 2 mins read</span>
               <p class="countable" data-count-id="ref6Count">I built SlideKey because most slide-authoring tools work against the way I naturally plan teaching materials. My preferred workflow is text-first: outline ideas, sequence explanation carefully, then shape presentation from that structure. Conventional slide software tends to privilege drag-and-drop layout, visual tweaking, and disconnected text boxes, which makes it harder to think clearly about knowledge progression. It also has very little domain knowledge about education. SlideKey was my attempt to build an authoring environment that starts from instructional thinking rather than generic presentation software conventions. Instead of asking me to design slides as isolated canvases, it lets me write and structure content more like an editor, then generate a stronger presentation layer from that foundation.</p>
               <p class="countable" data-count-id="ref6Count">What makes the tool educationally significant is that the design frameworks are built into the authoring model itself. In the SlideKey project, education profiles and framework registries explicitly include Mayer's multimedia principles, Universal Design for Learning, and Cognitive Load Theory as defaults for presentation generation. That matters because it shifts these frameworks from after-the-fact checklists to active design constraints. I also used pretext.js in the broader SlideKey workflow to solve a common classroom presentation problem: text that looks acceptable while authoring but becomes too small, too dense, or poorly fitted when displayed. By using a measurement-based layout approach, the tool can size and fit text more deliberately, reducing overload and improving legibility.</p>
               <p class="countable" data-count-id="ref6Count">Critically, I did not build SlideKey as a commercial product. I built it as a personal teaching tool for producing better educational materials. That intention shaped the project in a useful way: instead of chasing every presentation feature, I focused on problems that matter in real classrooms, such as text overload, weak visual hierarchy, and the absence of pedagogy-aware defaults in mainstream tools. If I continue developing it, my next priority would be tighter classroom-facing templates and more explicit support for checks for understanding, worked examples, and annotation-based teaching sequences. Overall, SlideKey demonstrates my capacity to combine software development knowledge with instructional design thinking in order to build tools that are creatively ambitious, pedagogically purposeful, and directly useful in my future teaching practice.</p>
             </div>
 
             <div id="reflection-7" data-resource="7" data-slug="integrated-literacy-diagram" data-title="Resource 7: Integrated Literacy Diagram" data-card-title="Integrated Literacy Diagram" data-summary="Reflective post on an ambitious literacy diagram project that ultimately stalled." data-word-count-id="ref7Count" data-media-images="resources/Pasted image 20260429100540.png" data-media-download="resources/Integrated%20Literacy%20Diagram.pdf" data-media-download-name="Integrated Literacy Diagram PDF">
-              <span id="ref7Count" style="display: none;">0 words</span>
+              <span id="ref7Count" style="display: none;">898 words · 5 mins read</span>
               <p class="countable" data-count-id="ref7Count">As part of my thinking process for the EDU1001 AT3 paper, I took a detour into diagram-making. It was productive as a form of reflection, but ultimately the project stalled. This post explains why.</p>
               <p class="countable" data-count-id="ref7Count">For AT3, we were asked to choose one of three topics. I chose this one:</p>
               <blockquote>
@@ -1691,7 +1744,7 @@
             <p id="resourceDetailSummary">Open a resource from the Resources page to view its dedicated reflection page.</p>
           </div>
           <div class="resource-detail-actions">
-            <div class="word-chip"><i data-lucide="file-text"></i> <span id="resourceDetailWordCount">0 words</span></div>
+            <div class="word-chip"><i data-lucide="file-text"></i> <span id="resourceDetailWordCount">0 words · 0 mins read</span></div>
             <a class="resource-permalink" id="resourcePermalink" href="#resources">Permalink</a>
           </div>
         </header>
@@ -1757,6 +1810,26 @@
                 <li>Bjork, R. A., and Bjork, E. L. (2020). Making things hard on yourself, but in a good way: Creating desirable difficulties to enhance learning. PDF. https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf</li>
               </ol>
             <!-- END:references-list -->
+          </div>
+        </div>
+      </article>
+
+      <article class="view" id="contact">
+        <header class="page-head reveal section-head-light">
+          <div class="section-head-light-topline">
+            <span class="tag">Contact</span>
+            <span class="section-head-light-note">Get in Touch</span>
+          </div>
+          <div class="section-head-light-titleblock">
+            <h2>Contact Me</h2>
+            <p>Professional contact details.</p>
+          </div>
+        </header>
+        <div class="grid">
+          <div class="col-12 card reveal">
+            <h3>Contact Details</h3>
+            <p><strong>Personal:</strong> <a href="mailto:alecs@eml.cc">alecs@eml.cc</a></p>
+            <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/alec-sloman-2b294820/" target="_blank" rel="noreferrer">https://www.linkedin.com/in/alec-sloman-2b294820/</a></p>
           </div>
         </div>
       </article>
@@ -2032,39 +2105,6 @@
         setTimeout(updateScrollHint, 0);
       }
 
-      function countWords(text) {
-        return text.trim().split(/\s+/).filter(Boolean).length;
-      }
-
-      function updateCounts() {
-        var groups = {};
-        Array.from(document.querySelectorAll('.countable')).forEach(function (block) {
-          var id = block.getAttribute('data-count-id');
-          if (!id) return;
-          groups[id] = (groups[id] || 0) + countWords(block.textContent);
-        });
-
-        // Fallback: if a reflection has no countable markers, count its full text.
-        Array.from(document.querySelectorAll('.reflection-hidden [data-word-count-id]')).forEach(function (reflection) {
-          var id = reflection.getAttribute('data-word-count-id');
-          if (!id || groups[id] > 0) return;
-
-          var clone = reflection.cloneNode(true);
-          var hiddenCount = clone.querySelector('#' + id);
-          if (hiddenCount) {
-            hiddenCount.remove();
-          }
-
-          groups[id] = countWords(clone.textContent || '');
-        });
-
-        Object.keys(groups).forEach(function (id) {
-          var target = document.getElementById(id);
-          if (!target) return;
-          target.textContent = groups[id] + ' words';
-        });
-      }
-
       function setupReveal() {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
@@ -2207,12 +2247,10 @@
       window.addEventListener('load', updateScrollHint);
 
       window.addEventListener('hashchange', function () {
-        updateCounts();
         activate(routeFromHash());
         updateScrollHint();
       });
 
-      updateCounts();
       activate(routeFromHash());
       setupReveal();
       setupLightbox();
