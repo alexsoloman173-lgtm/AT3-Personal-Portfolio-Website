@@ -468,42 +468,149 @@ def render_about_sidebar() -> str:
             f'<p class="profile-caption">{text(meta.get("portrait_caption", ""))}</p>',
             f'<h3>{text(meta.get("current_priorities_heading", "Current priorities"))}</h3>',
             f'<p>{render_inline(str(meta.get("current_priorities", "")))}</p>',
-            f'<h3 style="margin-top: 1rem;">{text(meta.get("next_step_heading", "Next step"))}</h3>',
-            f'<p>{render_inline(str(meta.get("next_step", "")))}</p>',
         ]
     )
 
 
-def render_blog_content() -> str:
-    meta, body = parse_frontmatter(CONTENT_DIR / "blog.md")
+def strip_markdown_text(markdown: str) -> str:
+    plain = LINK_RE.sub(r"\1", markdown)
+    plain = re.sub(r"</?[^>]+>", "", plain)
+    plain = re.sub(r"[*_`~#>]", "", plain)
+    plain = re.sub(r"\s+", " ", plain)
+    return plain.strip()
+
+
+def excerpt_from_body(body: str, *, words: int = 28) -> str:
+    paragraphs = [chunk.strip() for chunk in body.split("\n\n") if chunk.strip()]
+    selected = ""
+    for candidate in paragraphs:
+        line = candidate.splitlines()[0].strip()
+        if line.startswith(("#", ">", "!", "|")):
+            continue
+        if ORDERED_RE.match(line):
+            continue
+        selected = candidate
+        break
+    if not selected and paragraphs:
+        selected = paragraphs[0]
+
+    plain = strip_markdown_text(selected)
+    tokens = plain.split()
+    if len(tokens) <= words:
+        return plain
+    return " ".join(tokens[:words]).rstrip(".,;: ") + "..."
+
+
+def blog_slug(meta: Dict[str, object], path: Path) -> str:
+    base = str(meta.get("slug") or slugify(str(meta.get("title", path.stem))))
+    return base or slugify(path.stem)
+
+
+def normalized_id(value: object, fallback: str) -> str:
+    base = re.sub(r"[^a-zA-Z0-9_-]+", "", str(value).strip())
+    return base or fallback
+
+
+def load_blog_posts() -> List[Tuple[Dict[str, object], str]]:
+    blog_dir = CONTENT_DIR / "blogs"
+    paths = sorted(blog_dir.glob("*.md")) if blog_dir.exists() else []
+    if not paths:
+        legacy_blog_dir = CONTENT_DIR / "blog"
+        if legacy_blog_dir.exists():
+            paths = sorted(legacy_blog_dir.glob("*.md"))
+    if not paths:
+        fallback = CONTENT_DIR / "blog.md"
+        if fallback.exists():
+            paths = [fallback]
+
+    posts = [(parse_frontmatter(path), path) for path in paths]
+    ordered = sorted(posts, key=lambda item: str(item[0][0].get("date", "")), reverse=True)
+
+    slug_map: Dict[str, str] = {}
+    count_ids: Dict[str, int] = {}
+    loaded: List[Tuple[Dict[str, object], str]] = []
+
+    for index, ((meta, body), path) in enumerate(ordered, start=1):
+        slug = blog_slug(meta, path)
+        if slug in slug_map:
+            raise ValueError(f"Duplicate blog slug '{slug}' for {path.name} and {slug_map[slug]}")
+
+        default_count = "blogCount" if index == 1 else f"blog{index}Count"
+        base_count_id = normalized_id(meta.get("count_id", default_count), default_count)
+        count_id = base_count_id
+        suffix = 2
+        while count_id in count_ids:
+            count_id = f"{base_count_id}{suffix}"
+            suffix += 1
+
+        meta["slug"] = slug
+        meta["count_id"] = count_id
+        meta["summary"] = str(meta.get("summary") or excerpt_from_body(body))
+
+        slug_map[slug] = path.name
+        count_ids[count_id] = 1
+        loaded.append((meta, body))
+
+    return loaded
+
+
+def render_blog_index_cards() -> str:
+    cards: List[str] = []
+    for meta, _ in load_blog_posts():
+        slug = str(meta.get("slug"))
+        count_id = str(meta.get("count_id"))
+        title = str(meta.get("title", "Untitled post"))
+        category = str(meta.get("category") or meta.get("tag") or "Post")
+        summary = str(meta.get("summary", ""))
+        author = str(meta.get("author", "")).strip()
+        date = str(meta.get("date", "")).strip()
+
+        cards.append(
+            "\n".join(
+                [
+                    f'<article class="blog-index-item reveal" data-blog-slug="{attr(slug)}" tabindex="0" role="link" aria-label="Open post: {attr(title)}">',
+                    '  <div class="blog-index-top">',
+                    f'    <span class="tag">{text(category)}</span>',
+                    f'    <div class="word-chip"><i data-lucide="pen-line"></i> <span id="{attr(count_id)}">0 words</span></div>',
+                    '  </div>',
+                    f'  <h3>{text(title)}</h3>',
+                    f'  <p class="blog-index-summary">{render_inline(summary)}</p>',
+                    '  <p class="blog-index-meta">',
+                    f'    {text(author) if author else "Portfolio"}{" · " + text(date) if date else ""}',
+                    '  </p>',
+                    '</article>',
+                ]
+            )
+        )
+    return "\n\n".join(cards)
+
+
+def render_blog_post_data(meta: Dict[str, object], body: str) -> str:
     count_id = str(meta.get("count_id", "blogCount"))
-    parts = [f"<h3>{text(meta.get('title', 'Blog Post'))}</h3>"]
-    author = meta.get("author")
-    if author:
-        parts.append(f'<p class="countable" data-count-id="{attr(count_id)}">{text(author)}</p>')
-    parts.append(render_blocks(body, count_id=count_id, countable_default=True))
-    return "\n".join(parts)
+    post_html = render_blocks(body, count_id=count_id, countable_default=True)
+
+    attrs = {
+        "data-blog-slug": meta.get("slug", ""),
+        "data-title": meta.get("title", "Untitled post"),
+        "data-tag": meta.get("category") or meta.get("tag", "Post"),
+        "data-summary": meta.get("summary", ""),
+        "data-word-count-id": count_id,
+        "data-author": meta.get("author", ""),
+        "data-date": meta.get("date", ""),
+        "data-download-tag": meta.get("download_tag", "Download"),
+        "data-download-heading": meta.get("download_heading", "Downloadable Resource"),
+        "data-download-image": meta.get("download_image", ""),
+        "data-download-alt": meta.get("download_alt", ""),
+        "data-download-copy": meta.get("download_copy", ""),
+        "data-download-file": meta.get("download_file", ""),
+        "data-download-label": meta.get("download_label", "Download PDF"),
+    }
+    attr_pairs = " ".join(f'{name}="{attr(value)}"' for name, value in attrs.items())
+    return "\n".join([f"<article {attr_pairs}>", f"  <div class=\"blog-post-content\">{post_html}</div>", "</article>"])
 
 
-def render_blog_sidebar() -> str:
-    meta, _ = parse_frontmatter(CONTENT_DIR / "blog.md")
-    return "\n".join(
-        [
-            f'<span class="tag">{text(meta.get("download_tag", "Download"))}</span>',
-            f'<h3>{text(meta.get("download_heading", "Downloadable Resource"))}</h3>',
-            '<img',
-            '  class="blog-download-thumb"',
-            f'  src="{attr(meta.get("download_image", ""))}"',
-            f'  alt="{attr(meta.get("download_alt", ""))}"',
-            '  loading="lazy"',
-            '/>',
-            f'<p class="blog-download-copy">{render_inline(str(meta.get("download_copy", "")))}</p>',
-            f'<a class="blog-download-link" href="{attr(meta.get("download_file", ""))}" download>',
-            '  <i data-lucide="file-down"></i>',
-            f'  {text(meta.get("download_label", "Download PDF"))}',
-            '</a>',
-        ]
-    )
+def render_blog_posts_data() -> str:
+    return "\n\n".join(render_blog_post_data(meta, body) for meta, body in load_blog_posts())
 
 
 def load_resources() -> List[Tuple[Dict[str, object], str]]:
@@ -645,8 +752,32 @@ def render_resource_reflections() -> str:
 
 
 def render_references() -> str:
+    import re, html as html_mod
     body = (CONTENT_DIR / "references.md").read_text(encoding="utf-8")
-    return render_blocks(body)
+    items = []
+    for line in body.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        # Split on first ' | '
+        if " | " in line:
+            citation_raw, note = line.split(" | ", 1)
+        else:
+            citation_raw, note = line, ""
+        # Strip leading list number (e.g. "1. ")
+        citation_raw = re.sub(r"^\d+\.\s*", "", citation_raw)
+        # Linkify URLs
+        citation_html = re.sub(
+            r"(https?://\S+)",
+            lambda m: f'<a href="{html_mod.escape(m.group(1))}" target="_blank" rel="noopener">{html_mod.escape(m.group(1))}</a>',
+            html_mod.escape(citation_raw),
+        )
+        note_html = f'<span class="ref-note">{html_mod.escape(note)}</span>' if note else ""
+        items.append(f'<div class="ref-card">'
+                     f'<p class="ref-citation">{citation_html}</p>'
+                     f'{note_html}'
+                     f'</div>')
+    return "\n".join(items)
 
 
 def build() -> None:
@@ -654,8 +785,8 @@ def build() -> None:
     regions = {
         "about-content": render_about_content(),
         "about-sidebar": render_about_sidebar(),
-        "blog-content": render_blog_content(),
-        "blog-sidebar": render_blog_sidebar(),
+        "blog-index": render_blog_index_cards(),
+        "blog-posts": render_blog_posts_data(),
         "resource-cards": render_resource_cards(),
         "resource-reflections": render_resource_reflections(),
         "references-list": render_references(),

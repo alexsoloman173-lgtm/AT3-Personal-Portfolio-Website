@@ -4,9 +4,9 @@ title: Infographic
 slug: infographic
 modal_title: Resource 1: Infographic (Week 3)
 icon: chart-column
-summary: A collection of memes that discuss LLMs in education
+summary: A collection of memes that discuss LLMs in education.
 image: resources/principal_skinner_meme.png
-image_alt: A collection of memes that discuss LLMs in education
+image_alt: A collection of memes that discuss LLMs in education.
 media_image: resources/principal_skinner_meme.png
 media_images: resources/clown_meme.png, resources/principal_skinner_meme.png, resources/salesman_meme.png
 count_id: ref1Count

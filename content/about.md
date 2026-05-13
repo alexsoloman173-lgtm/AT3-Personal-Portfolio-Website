@@ -5,11 +5,9 @@ count_id: aboutCount
 sidebar_tag: Professional Focus
 portrait_src: resources/alec_sloman.jpeg
 portrait_alt: Portrait photo of Alec Sloman for the About Me section
-portrait_caption: About Me Portrait
-current_priorities_heading: Current priorities
-current_priorities: Evidence-informed planning, inclusive task design, and ethical digital literacy are the three anchors shaping my present teaching identity.
-next_step_heading: Next step
-next_step: Translate this reflective stance into classroom-ready sequences that include differentiated supports, transparent success criteria, and targeted formative feedback.
+portrait_caption: Alec Sloman
+current_priorities_heading: About Me
+current_priorities: Completing my studies at La Trobe University and becoming a secondary classroom teacher.
 ---
 
 My name is Alec Sloman, and I am a pre-service teacher at La Trobe University. I came to teaching through a difficult personal experience of schooling. As a student, I was socially awkward, often disengaged, and uncertain about the purpose of what I was being asked to learn. Over time, that frustration became open resistance, and I know now that I made life hard for teachers who were trying to help. Looking back with more maturity, I see my experience as evidence of how easily students can be disconnected when school feels like compliance instead of growth. That perspective now shapes my professional identity: I want to create classrooms where students who feel alienated still have a clear pathway back into learning.

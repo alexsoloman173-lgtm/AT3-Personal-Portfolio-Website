@@ -15,6 +15,7 @@
       --muted: #5d5a52;
       --line: #c6c2b7;
       --grid-line: #ebe9e3;
+      --active-bg-tint: #d26f78;
       --accent: #be1e2d;
       --panel: #f8f7f3;
       --max: 1160px;
@@ -45,11 +46,30 @@
 
     body {
       min-height: 100vh;
+      background-color: color-mix(in srgb, var(--paper) 97%, var(--active-bg-tint) 3%);
       background-image:
-        linear-gradient(var(--grid-line) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-      background-size: 54px 54px;
-      background-position: -1px -1px;
+        radial-gradient(
+          120% 100% at 50% 36%,
+          color-mix(in srgb, var(--active-bg-tint) 7%, transparent) 0%,
+          transparent 74%
+        ),
+        linear-gradient(color-mix(in srgb, var(--active-bg-tint) 8%, var(--grid-line) 92%) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--active-bg-tint) 8%, var(--grid-line) 92%) 1px, transparent 1px),
+        linear-gradient(color-mix(in srgb, var(--active-bg-tint) 14%, var(--grid-line) 86%) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--active-bg-tint) 14%, var(--grid-line) 86%) 1px, transparent 1px);
+      background-size:
+        auto,
+        10px 10px,
+        10px 10px,
+        50px 50px,
+        50px 50px;
+      background-position:
+        center top,
+        -1px -1px,
+        -1px -1px,
+        -1px -1px,
+        -1px -1px;
+      transition: background-color 320ms var(--ease), background-image 320ms var(--ease);
     }
 
     a { color: inherit; text-underline-offset: 3px; }
@@ -65,8 +85,10 @@
       top: 0;
       z-index: 10;
       backdrop-filter: blur(4px);
-      background: color-mix(in srgb, var(--paper) 90%, transparent);
-      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--paper) 91%, var(--active-bg-tint) 9%);
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, var(--active-bg-tint) 20%);
+      box-shadow: 0 1px 0 color-mix(in srgb, transparent 80%, var(--active-bg-tint) 20%);
+      transition: background 320ms var(--ease), border-color 320ms var(--ease), box-shadow 320ms var(--ease);
     }
 
     .topbar-inner {
@@ -89,7 +111,7 @@
       font-size: 0.82rem;
     }
 
-    .brand i { color: var(--accent); }
+    .brand i { color: color-mix(in srgb, var(--accent) 75%, var(--active-bg-tint) 25%); }
 
     .nav {
       display: flex;
@@ -323,6 +345,23 @@
       color: var(--muted);
     }
 
+    .ref-card {
+      padding: 1rem 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+    }
+    .ref-card:last-child { border-bottom: none; }
+    .ref-card .ref-citation {
+      margin: 0 0 0.35rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .ref-card .ref-note {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
     .blog-download-link {
       display: inline-flex;
       align-items: center;
@@ -342,6 +381,100 @@
       color: #fff;
     }
 
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.2rem; }
+    .contact-form label { font-size: 0.8rem; font-family: "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); display: flex; flex-direction: column; gap: 0.35rem; }
+    .contact-form input,
+    .contact-form textarea {
+      font-family: inherit;
+      font-size: 0.95rem;
+      border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+      padding: 0.6rem 0.75rem;
+      background: color-mix(in srgb, var(--paper) 95%, var(--active-bg-tint) 5%);
+      color: var(--ink);
+      outline: none;
+      transition: border-color var(--ease);
+      resize: vertical;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--active-bg-tint); }
+    .contact-form textarea { min-height: 7rem; }
+    .contact-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .contact-form-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      align-self: flex-start;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0.55rem 1.1rem;
+      font-size: 0.8rem;
+      font-family: "IBM Plex Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      cursor: pointer;
+      transition: all var(--ease);
+    }
+    .contact-form-submit:hover { background: var(--active-bg-tint); border-color: var(--active-bg-tint); }
+    .contact-form-status { font-size: 0.85rem; color: var(--muted); font-style: italic; display: none; }
+    .contact-form-status.visible { display: block; }
+    @media (max-width: 600px) { .contact-form-row { grid-template-columns: 1fr; } }
+
+    .blog-index-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--gap);
+    }
+
+    .blog-index-item {
+      border: 1px solid var(--line);
+      background: color-mix(in srgb, var(--panel) 88%, #ffffff 12%);
+      padding: 0.95rem;
+      display: grid;
+      gap: 0.55rem;
+      cursor: pointer;
+      transition: all var(--ease);
+      min-height: 100%;
+    }
+
+    .blog-index-item:hover {
+      border-color: color-mix(in srgb, var(--section-accent) 38%, var(--line) 62%);
+      background: color-mix(in srgb, var(--section-accent) 8%, #ffffff 92%);
+      transform: translateY(-2px);
+    }
+
+    .blog-index-item:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--section-accent) 55%, var(--ink) 45%);
+      outline-offset: 3px;
+    }
+
+    .blog-index-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .blog-index-item h3 {
+      margin: 0;
+    }
+
+    .blog-index-summary {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.62;
+    }
+
+    .blog-index-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: "IBM Plex Mono", monospace;
+    }
+
     .tag {
       display: inline-flex;
       align-items: center;
@@ -355,7 +488,7 @@
       letter-spacing: 0.08em;
       margin: 0 0.45rem 0.8rem 0;
       vertical-align: middle;
-      background: #fff8;
+      background: color-mix(in srgb, #fff8 85%, var(--active-bg-tint) 15%);
     }
 
     .word-chip {
@@ -746,6 +879,10 @@
       flex-wrap: wrap;
     }
 
+    .resources-head-topline.no-chip {
+      justify-content: flex-end;
+    }
+
     .resources-head-topline .tag {
       margin: 0;
     }
@@ -782,6 +919,10 @@
       justify-content: space-between;
       gap: 0.7rem;
       flex-wrap: wrap;
+    }
+
+    .section-head-light-topline.no-chip {
+      justify-content: flex-end;
     }
 
     .section-head-light-topline .tag {
@@ -873,9 +1014,13 @@
     .resource-detail-sidebar {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.5rem;
       position: sticky;
       top: 5rem;
+    }
+
+    .resource-detail-sidebar p {
+      margin: 0;
     }
 
     /* Modal styles */
@@ -1214,6 +1359,7 @@
       .col-8, .col-6, .col-4 { grid-column: span 12; }
       .topbar-inner { align-items: flex-start; flex-direction: column; }
       .resources-masonry { columns: 1; }
+      .blog-index-list { grid-template-columns: 1fr; }
       .resource-detail-sidebar { position: static; }
 
       .resource-detail-head {
@@ -1290,6 +1436,8 @@
             <div class="about-home-actions">
               <a href="#blog"><i data-lucide="notebook-pen"></i> Read Blog</a>
               <a href="#resources"><i data-lucide="library-big"></i> View Resources</a>
+              <a href="#references"><i data-lucide="book-marked"></i> References</a>
+              <a href="#contact"><i data-lucide="mail"></i> Contact</a>
             </div>
           </div>
           <aside class="metrics" aria-label="Portfolio snapshot">
@@ -1317,11 +1465,9 @@
                 loading="lazy"
                 referrerpolicy="no-referrer"
               />
-              <p class="profile-caption">About Me Portrait</p>
-              <h3>Current priorities</h3>
-              <p>Evidence-informed planning, inclusive task design, and ethical digital literacy are the three anchors shaping my present teaching identity.</p>
-              <h3 style="margin-top: 1rem;">Next step</h3>
-              <p>Translate this reflective stance into classroom-ready sequences that include differentiated supports, transparent success criteria, and targeted formative feedback.</p>
+              <p class="profile-caption">Alec Sloman</p>
+              <h3>About Me</h3>
+              <p>Completing my studies at La Trobe University and becoming a secondary classroom teacher.</p>
             <!-- END:about-sidebar -->
           </aside>
         </div>
@@ -1329,70 +1475,90 @@
 
       <article class="view" id="blog">
         <header class="page-head reveal section-head-light">
-          <div class="section-head-light-topline">
-            <span class="tag">Essay</span>
-            <span class="section-head-light-note">Critical Reflection</span>
+          <div class="section-head-light-topline no-chip">
+            <span class="section-head-light-note">Latest Entries</span>
           </div>
           <div class="section-head-light-titleblock">
             <h2>Blog</h2>
-            <p>Critical reflection on AI, cognition, and learning design.</p>
+            <p>Short-form reflections and insights on education topics.</p>
           </div>
         </header>
         <div class="grid">
-          <div class="col-8 card reveal">
-            <span class="tag">Blog Post</span>
-            <div class="word-chip"><i data-lucide="pen-line"></i> <span id="blogCount">779 words · 4 mins read</span></div>
-            <!-- BEGIN:blog-content -->
-              <h3>For Learning, Toil is Not Optional</h3>
-              <p class="countable" data-count-id="blogCount">Alec Sloman</p>
-              <p class="countable" data-count-id="blogCount">Recently while browsing the internet, I was served an ad by Anthropic—the creators of Claude— which claimed that "toil is optional." Ordinarily I ignore sensationalist PR slop, but as a software developer I recognise that it is not entirely hyperbole. As of late 2025, coding agents such as Claude Code and Github Copilot demonstrate capabilities that would have been difficult to fathom even a few years ago.</p>
-              <p class="countable" data-count-id="blogCount">Much of the routine burden of software development—repeating familiar patterns, tracking down elusive bugs, maintaining documentation, and managing dependencies—is being reduced at a rapid pace.</p>
-              <p class="countable" data-count-id="blogCount">While toil in software development is increasingly viewed as a liability to be minimised, with education it's a different story because toil plays a completely different role. Far from being a liability, it is formative. It is indispensable. The effort involved in grappling with material is inseperable from the biological processes through which understanding is built. When that struggle is offloaded, we remove the conditions under which learning can occur and mastery can develop.</p>
-              <p class="countable" data-count-id="blogCount"><a href="https://www.media.mit.edu/publications/your-brain-on-chatgpt/" target="_blank" rel="noreferrer">A 2025 study</a> from the MIT Media Lab on AI-assisted writing found clear differences in brain activity<sup>1</sup>:</p>
-              <blockquote>
-                <p class="countable" data-count-id="blogCount">EEG revealed significant differences in brain connectivity: Brain-only participants exhibited the strongest, most distributed networks; search engine users showed moderate engagement; and LLM users displayed the weakest connectivity.</p>
-              </blockquote>
-              <p class="countable" data-count-id="blogCount">Participants wrote an essay either unaided, with search engines, or with LLMs. While the study measures electrical activity via Electroencephalography, <a href="https://pubmed.ncbi.nlm.nih.gov/35218932/" target="_blank" rel="noreferrer">prior developmental research</a> suggests that changes in EEG connectivity can track (though not directly measure) underlying processes such as Synaptogenesis and Myelination<sup>2</sup>. Any observed reduction in neural engagement should therefore be interpreted cautiously: it may indicate less coordinated or less demanding network activity, which could correspond to conditions that are less conducive to synaptogenesis, rather than implying a direct reduction in synaptogenesis itself.</p>
-              <p class="countable" data-count-id="blogCount">While this relationship is not definitively established, for the purposes of a blog-level argument, the connection is sufficiently well-supported to justify a cautious proxy: I am comfortable treating reduced EEG engagement as indicative of reduced conditions for synaptic development, given the broader claim that learning is metabolically and cognitively effortful—that it requires a degree of toil to drive the neural changes we associate with durable understanding. See <a href="https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf" target="_blank" rel="noreferrer">Bjork & Bjork</a> (2020)<sup>3</sup> for more on that.</p>
-              <p class="countable" data-count-id="blogCount">With that disclaimer established, now imagine a field of tall grass. Each time you walk between two landmarks—a boulder, a stream, a stand of trees—you press down a faint trail. That is synaptogenesis: the path begins to exist. Walk it repeatedly, and the trail hardens, the ground compacts, and movement becomes faster. That is myelination: the path becomes efficient. A brain that labours lays down paths and reinforces them. A brain that offloads too early walks less ground—and builds fewer roads. Mastery requires walking those paths again and again.</p>
-              <p class="countable" data-count-id="blogCount">Now consider LLMs. During training, a model traverses an immense number of possible paths between conceptual “landmarks,” adjusting its internal weights through repeated passes over data. Modern training runs involve on the order of 10<sup>26</sup> discrete computations—a scale of effort no human could approximate. This process is not magical; it is iterative and exhaustive. Each pass reinforces certain pathways and weakens others, gradually producing a system that can move reliably between ideas. Without that sustained computational labour, the model would have no coherent way to navigate those relationships at all.</p>
-              <p class="countable" data-count-id="blogCount">Seen in this light, the apparent fluency of an LLM is the product of accumulated work rather than inherent capability. The same principle holds for human learners. When we look past the surface, what appears effortless is underwritten by repetition and reinforcement. The difference is that, in machines, the toil is hidden in training runs, and in humans, it is hidden in practice. When a learner is handed the finished artifact—the essay—they are given the outcome without engaging in the process that builds those pathways.</p>
-              <p class="countable" data-count-id="blogCount">Returning to our visual metaphor, the paths are not walked. The trails are not cut. The roads are never consolidated. The learner may hold a finished piece of writing, but they remain in the field, without the means to move from one landmark to the next.</p>
-              <p class="countable" data-count-id="blogCount">Now, what should we make of all this? We cannot simply ban LLMs. Instead, we need to make cognitive toil desirable again. This runs against the prevailing framing of such tools, where toil is treated as inefficiency to be eliminated. But the evidence suggests otherwise: when the struggle is removed, so too are the conditions under which learning is built.</p>
-              <p class="countable" data-count-id="blogCount">While AI companies search for toil to eliminate, we must ask whether learning can survive without it. Human intelligence still appears to require a metabolic price of admission. Toil is that price.</p>
-              <h2>References</h2>
-              <ol>
-                <li>Kosmyna, N., Hauptmann, E., Yuan, Y. T., Situ, J., Liao, X.-H., Beresnitzky, A. V., Braunstein, I., and Maes, P. (2025). Your brain on ChatGPT: Accumulation of cognitive debt when using an AI assistant for essay writing task. MIT Media Lab publication. <a href="https://www.media.mit.edu/publications/your-brain-on-chatgpt/" target="_blank" rel="noreferrer">https://www.media.mit.edu/publications/your-brain-on-chatgpt/</a></li>
-                <li>Bosch-Bayard, J., Biscay, R. J., Fernandez, T., Otero, G. A., Ricardo-Garcell, J., Aubert-Vazquez, E., Evans, A. C., & Harmony, T. (2022). EEG effective connectivity during the first year of life mirrors brain synaptogenesis, myelination, and early right hemisphere predominance. NeuroImage, 252, 119035. <a href="https://pubmed.ncbi.nlm.nih.gov/35218932/" target="_blank" rel="noreferrer">https://pubmed.ncbi.nlm.nih.gov/35218932/</a></li>
-                <li>Bjork, R. A., and Bjork, E. L. (2020). Making things hard on yourself, but in a good way: Creating desirable difficulties to enhance learning. PDF. <a href="https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf" target="_blank" rel="noreferrer">https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf</a></li>
-              </ol>
-            <!-- END:blog-content -->
+          <div class="col-12 card reveal">
+            <div class="blog-index-list">
+              <!-- BEGIN:blog-index -->
+                <article class="blog-index-item reveal" data-blog-slug="for-learning-toil-is-not-optional" tabindex="0" role="link" aria-label="Open post: For Learning, Toil is Not Optional">
+                  <div class="blog-index-top">
+                    <span class="tag">AI</span>
+                    <div class="word-chip"><i data-lucide="pen-line"></i> <span id="blogCount">777 words · 4 mins read</span></div>
+                  </div>
+                  <h3>For Learning, Toil is Not Optional</h3>
+                  <p class="blog-index-summary">Critical reflection on why offloading effort to AI can weaken the conditions required for durable human learning.</p>
+                  <p class="blog-index-meta">
+                    Alec Sloman
+                  </p>
+                </article>
+              <!-- END:blog-index -->
+            </div>
           </div>
+        </div>
 
-          <aside class="col-4 card reveal" aria-label="Blog downloadable resource">
-            <!-- BEGIN:blog-sidebar -->
-              <span class="tag">Download</span>
-              <h3>Downloadable Resource</h3>
-              <img
-                class="blog-download-thumb"
-                src="resources/blog_thumbnail.png"
-                alt="Thumbnail preview of the annotated blog PDF"
-                loading="lazy"
-              />
-              <p class="blog-download-copy">This article is available as a PDF and is fully annotated with illustrations.</p>
-              <a class="blog-download-link" href="resources/For%20Learning,%20Toil%20is%20Not%20Optional.pdf" download>
-                <i data-lucide="file-down"></i>
-                Download PDF
-              </a>
-            <!-- END:blog-sidebar -->
+        <div class="blog-hidden" style="display: none;">
+          <!-- BEGIN:blog-posts -->
+            <article data-blog-slug="for-learning-toil-is-not-optional" data-title="For Learning, Toil is Not Optional" data-tag="AI" data-summary="Critical reflection on why offloading effort to AI can weaken the conditions required for durable human learning." data-word-count-id="blogCount" data-author="Alec Sloman" data-date="" data-download-tag="Download" data-download-heading="Downloadable Resource" data-download-image="resources/blog_thumbnail.png" data-download-alt="Thumbnail preview of the annotated blog PDF" data-download-copy="This article is available as a PDF and is fully annotated with illustrations." data-download-file="resources/For%20Learning,%20Toil%20is%20Not%20Optional.pdf" data-download-label="Download PDF">
+              <div class="blog-post-content"><p class="countable" data-count-id="blogCount">Recently while browsing the internet, I was served an ad by Anthropic—the creators of Claude— which claimed that "toil is optional." Ordinarily I ignore sensationalist PR slop, but as a software developer I recognise that it is not entirely hyperbole. As of late 2025, coding agents such as Claude Code and Github Copilot demonstrate capabilities that would have been difficult to fathom even a few years ago.</p>
+            <p class="countable" data-count-id="blogCount">Much of the routine burden of software development—repeating familiar patterns, tracking down elusive bugs, maintaining documentation, and managing dependencies—is being reduced at a rapid pace.</p>
+            <p class="countable" data-count-id="blogCount">While toil in software development is increasingly viewed as a liability to be minimised, with education it's a different story because toil plays a completely different role. Far from being a liability, it is formative. It is indispensable. The effort involved in grappling with material is inseperable from the biological processes through which understanding is built. When that struggle is offloaded, we remove the conditions under which learning can occur and mastery can develop.</p>
+            <p class="countable" data-count-id="blogCount"><a href="https://www.media.mit.edu/publications/your-brain-on-chatgpt/" target="_blank" rel="noreferrer">A 2025 study</a> from the MIT Media Lab on AI-assisted writing found clear differences in brain activity<sup>1</sup>:</p>
+            <blockquote>
+              <p class="countable" data-count-id="blogCount">EEG revealed significant differences in brain connectivity: Brain-only participants exhibited the strongest, most distributed networks; search engine users showed moderate engagement; and LLM users displayed the weakest connectivity.</p>
+            </blockquote>
+            <p class="countable" data-count-id="blogCount">Participants wrote an essay either unaided, with search engines, or with LLMs. While the study measures electrical activity via Electroencephalography, <a href="https://pubmed.ncbi.nlm.nih.gov/35218932/" target="_blank" rel="noreferrer">prior developmental research</a> suggests that changes in EEG connectivity can track (though not directly measure) underlying processes such as Synaptogenesis and Myelination<sup>2</sup>. Any observed reduction in neural engagement should therefore be interpreted cautiously: it may indicate less coordinated or less demanding network activity, which could correspond to conditions that are less conducive to synaptogenesis, rather than implying a direct reduction in synaptogenesis itself.</p>
+            <p class="countable" data-count-id="blogCount">While this relationship is not definitively established, for the purposes of a blog-level argument, the connection is sufficiently well-supported to justify a cautious proxy: I am comfortable treating reduced EEG engagement as indicative of reduced conditions for synaptic development, given the broader claim that learning is metabolically and cognitively effortful—that it requires a degree of toil to drive the neural changes we associate with durable understanding. See <a href="https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf" target="_blank" rel="noreferrer">Bjork & Bjork</a> (2020)<sup>3</sup> for more on that.</p>
+            <p class="countable" data-count-id="blogCount">With that disclaimer established, now imagine a field of tall grass. Each time you walk between two landmarks—a boulder, a stream, a stand of trees—you press down a faint trail. That is synaptogenesis: the path begins to exist. Walk it repeatedly, and the trail hardens, the ground compacts, and movement becomes faster. That is myelination: the path becomes efficient. A brain that labours lays down paths and reinforces them. A brain that offloads too early walks less ground—and builds fewer roads. Mastery requires walking those paths again and again.</p>
+            <p class="countable" data-count-id="blogCount">Now consider LLMs. During training, a model traverses an immense number of possible paths between conceptual “landmarks,” adjusting its internal weights through repeated passes over data. Modern training runs involve on the order of 10<sup>26</sup> discrete computations—a scale of effort no human could approximate. This process is not magical; it is iterative and exhaustive. Each pass reinforces certain pathways and weakens others, gradually producing a system that can move reliably between ideas. Without that sustained computational labour, the model would have no coherent way to navigate those relationships at all.</p>
+            <p class="countable" data-count-id="blogCount">Seen in this light, the apparent fluency of an LLM is the product of accumulated work rather than inherent capability. The same principle holds for human learners. When we look past the surface, what appears effortless is underwritten by repetition and reinforcement. The difference is that, in machines, the toil is hidden in training runs, and in humans, it is hidden in practice. When a learner is handed the finished artifact—the essay—they are given the outcome without engaging in the process that builds those pathways.</p>
+            <p class="countable" data-count-id="blogCount">Returning to our visual metaphor, the paths are not walked. The trails are not cut. The roads are never consolidated. The learner may hold a finished piece of writing, but they remain in the field, without the means to move from one landmark to the next.</p>
+            <p class="countable" data-count-id="blogCount">Now, what should we make of all this? We cannot simply ban LLMs. Instead, we need to make cognitive toil desirable again. This runs against the prevailing framing of such tools, where toil is treated as inefficiency to be eliminated. But the evidence suggests otherwise: when the struggle is removed, so too are the conditions under which learning is built.</p>
+            <p class="countable" data-count-id="blogCount">While AI companies search for toil to eliminate, we must ask whether learning can survive without it. Human intelligence still appears to require a metabolic price of admission. Toil is that price.</p>
+            <h2>References</h2>
+            <ol>
+              <li>Kosmyna, N., Hauptmann, E., Yuan, Y. T., Situ, J., Liao, X.-H., Beresnitzky, A. V., Braunstein, I., and Maes, P. (2025). Your brain on ChatGPT: Accumulation of cognitive debt when using an AI assistant for essay writing task. MIT Media Lab publication. <a href="https://www.media.mit.edu/publications/your-brain-on-chatgpt/" target="_blank" rel="noreferrer">https://www.media.mit.edu/publications/your-brain-on-chatgpt/</a></li>
+              <li>Bosch-Bayard, J., Biscay, R. J., Fernandez, T., Otero, G. A., Ricardo-Garcell, J., Aubert-Vazquez, E., Evans, A. C., & Harmony, T. (2022). EEG effective connectivity during the first year of life mirrors brain synaptogenesis, myelination, and early right hemisphere predominance. NeuroImage, 252, 119035. <a href="https://pubmed.ncbi.nlm.nih.gov/35218932/" target="_blank" rel="noreferrer">https://pubmed.ncbi.nlm.nih.gov/35218932/</a></li>
+              <li>Bjork, R. A., and Bjork, E. L. (2020). Making things hard on yourself, but in a good way: Creating desirable difficulties to enhance learning. PDF. <a href="https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf" target="_blank" rel="noreferrer">https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf</a></li>
+            </ol></div>
+            </article>
+          <!-- END:blog-posts -->
+        </div>
+      </article>
+
+      <article class="view" id="blog-post">
+        <header class="page-head reveal resource-detail-head">
+          <div class="resource-detail-topline">
+            <a class="resource-back-link" href="#blog">
+              <i data-lucide="arrow-left"></i>
+              Back to blog
+            </a>
+            <span class="tag" id="blogPostTag">Post</span>
+          </div>
+          <div class="resource-detail-titleblock">
+            <h2 id="blogPostTitle">Blog post</h2>
+          </div>
+        </header>
+        <div class="grid resource-detail-grid">
+          <div class="col-8 card reveal">
+            <div class="word-chip"><i data-lucide="file-text"></i> <span id="blogPostWordCount">0 words · 0 mins read</span></div>
+            <div class="resource-detail-body" id="blogPostBody"></div>
+          </div>
+          <aside class="col-4 card reveal" aria-label="Blog post metadata and downloads">
+            <div class="resource-detail-sidebar" id="blogPostSidebar"></div>
           </aside>
         </div>
       </article>
 
       <article class="view" id="resources">
         <header class="page-head reveal resources-head">
-          <div class="resources-head-topline">
-            <span class="tag">Resources</span>
+          <div class="resources-head-topline no-chip">
             <span class="resources-head-note">Open Any Card</span>
           </div>
           <div class="resources-head-titleblock">
@@ -1409,11 +1575,11 @@
                   <h3>Infographic</h3>
                   <i data-lucide="chart-column"></i>
                 </div>
-                <p>A collection of memes that discuss LLMs in education</p>
+                <p>A collection of memes that discuss LLMs in education.</p>
                 <img
                   class="resource-card-image"
                   src="resources/principal_skinner_meme.png"
-                  alt="A collection of memes that discuss LLMs in education"
+                  alt="A collection of memes that discuss LLMs in education."
                   loading="lazy"
                 />
               </div>
@@ -1555,7 +1721,7 @@
         <!-- Hidden resource data for routed detail pages -->
         <div class="reflection-hidden">
           <!-- BEGIN:resource-reflections -->
-            <div id="reflection-1" data-resource="1" data-slug="infographic" data-title="Resource 1: Infographic (Week 3)" data-card-title="Infographic" data-summary="A collection of memes that discuss LLMs in education" data-word-count-id="ref1Count" data-media-images="resources/clown_meme.png|resources/principal_skinner_meme.png|resources/salesman_meme.png">
+            <div id="reflection-1" data-resource="1" data-slug="infographic" data-title="Resource 1: Infographic (Week 3)" data-card-title="Infographic" data-summary="A collection of memes that discuss LLMs in education." data-word-count-id="ref1Count" data-media-images="resources/clown_meme.png|resources/principal_skinner_meme.png|resources/salesman_meme.png">
               <span id="ref1Count" style="display: none;">425 words · 2 mins read</span>
               <p class="countable" data-count-id="ref1Count">When I started studying education at La Trobe University, I did not fully anticipate how indispensable information design was to the practice of teaching. In retrospect, of course it makes perfect sense, but still, I was initially astonished by the breadth and depth of just this one field. Case in point, through researching the terms "chartjunk" and "hairball diagram" I encountered the eccentric and arcane works of <a href="https://www.edwardtufte.com/" target="_blank" rel="noreferrer">Edward Tufte</a> - and have enjoyed reading those tremendously.</p>
               <p class="countable" data-count-id="ref1Count">Now, although we were instructed to design a traditional infographic, I made the conscious and admittedly risky (from a marking perspective) decision to make a collection of memes instead. What's more, I did so on the basis of my own preferences <em>and</em> of a single conversation with a friend and mentee who recently completed highschool. I asked them about the teachers who had the most enduring impact, and what specifically made the difference. To my delight, they cited the use of <em>image format memes</em>. Relating this to my own experience: I remember <em>many</em> memes but very <em>few</em> infographics. To keep the final product clear and easy to understand, I constrained each meme to one claim, used familiar meme templates, and paired each visual with explanatory text so the meaning was clear even if the joke did not land.</p>
@@ -1585,8 +1751,8 @@
             </div>
 
             <div id="reflection-3" data-resource="3" data-slug="ai-activity" data-title="Resource 3: AI Activity (Week 8)" data-card-title="AI Activity" data-summary="A study of LLM-generated lesson plans." data-word-count-id="ref3Count" data-media-images="resources/lesson_plan.png" data-media-downloads="resources/Lesson%20Planning%20Is%20Not%20a%20Prompting%20Problem.pdf|resources/Introducing%20Linear%20Equations%20%28one-shot%29.pdf|resources/Introducing%20Linear%20Equations%20%28with%20harness%29.pdf" data-media-download-names="Lesson Planning Is Not a Prompting Problem|Introducing Linear Equations (one-shot)|Introducing Linear Equations (with harness)">
-              <span id="ref3Count" style="display: none;">453 words · 3 mins read</span>
-              <p class="countable" data-count-id="ref3Count">Developing this resource was both fun and interesting. As an expert in software development and a close follower of deep learning applications, I came in with a pretty serious advantages. It also happens that I built a lesson plan generator in week 2 of the course - integrated into my slide authoring tool SlideKey (see the resource for more information) - just for fun! So I'd already learned quite a lot about how to apply LLMs to this specific task, and had a battle-tested architecture ready to go.</p>
+              <span id="ref3Count" style="display: none;">452 words · 3 mins read</span>
+              <p class="countable" data-count-id="ref3Count">Developing this resource was both fun and interesting. As an expert in software development and a close follower of deep learning applications, I came in with pretty serious advantages. It also happens that I built a lesson plan generator in week 2 of the course - integrated into my slide authoring tool SlideKey (see the resource for more information) - just for fun! So I'd already learned quite a lot about how to apply LLMs to this specific task, and had a battle-tested architecture ready to go.</p>
               <p class="countable" data-count-id="ref3Count">Thus, my approach was just to rebuild it, with an LLM-coding agent, with a minimum of prompts. I then asked the agent to write a blog post - from its own perspective and in its own words - analyzing the problem space, describing our solution, and comparing the outputs of our "harness" versus "one-shot" prompt. I have to say: reading the agent's post was delightful.</p>
               <p class="countable" data-count-id="ref3Count">The result is far from perfect, and the artifact that it ultimately generated could use a lot more work. But for 10 prompts - plus an 11th for the blog post - I am pleased with the result. Start by reading the download called "Lesson Planning is Not a Prompting Problem", and then look at the one-shot and harness versions of the lesson plan.</p>
               <p class="countable" data-count-id="ref3Count">To answer the process questions directly: this was definitely not my first use of an LLM; I came into the task with prior experience building a lesson-plan generator, which shaped how I framed the prompting work. The main factors I considered were curriculum alignment, learner appropriateness, specificity of lesson structure, and output reliability: all areas where I already knew were problematic for a one-shot prompting approach. In practical terms, I harnessed the model toward concrete planning moves - clear learning intentions, worked examples, checks for understanding, and sequencing that matched an introductory linear equations lesson.</p>
@@ -1770,8 +1936,7 @@
 
       <article class="view" id="references">
         <header class="page-head reveal section-head-light">
-          <div class="section-head-light-topline">
-            <span class="tag">Sources</span>
+          <div class="section-head-light-topline no-chip">
             <span class="section-head-light-note">Cited Sources</span>
           </div>
           <div class="section-head-light-titleblock">
@@ -1781,34 +1946,29 @@
         </header>
         <div class="grid">
           <div class="col-12 card reveal">
-            <span class="tag">Reference Capture List</span>
-            <h3>Sources and links used in this portfolio draft</h3>
-            <p>These are captured for transfer into the official coversheet reference section and to track all external links used in content.</p>
             <!-- BEGIN:references-list -->
-              <ol>
-                <li>Sloman, A. (2026). Cosmic Chronometer (interactive application). https://rexmortus.github.io/cosmic_chronometer/</li>
-                <li>Sloman, A. (2026). Galaxy Brain Infographic (classroom meme-format resource). resources/galaxy_brain.png</li>
-                <li>Sloman, A. (2026). APA7 Challenge (gamification resource). https://alexsoloman173-lgtm.github.io/APA7-challange/</li>
-                <li>Sloman, A. (2026). APA7 Challenge screenshot (gamification resource image). resources/gamification.png</li>
-                <li>YouTube thumbnail image used for The Oregon Trail. https://i.ytimg.com/vi/DwHee12Z_Dg/maxresdefault.jpg</li>
-                <li>Reddit-hosted image used for Midnight Rescue. https://preview.redd.it/1hrjanf2yq811.jpg?auto=webp&amp;s=6c3e02a84d2a6f370c0567dbc50929113f639dbe</li>
-                <li>LaunchBox Games Database image used for Word Munchers. https://images.launchbox-app.com//449d681d-eab7-4a58-8619-f0f95e0c5693.png</li>
-                <li>My Abandonware image used for Designasaurus II. https://www.myabandonware.com/media/screenshots/d/designasaurus-ii-vj/designasaurus-ii_7.png</li>
-                <li>Sloman, A. (2026). Status Cards (classroom formative assessment resource, PDF). resources/status_cards.pdf</li>
-                <li>Sloman, A. (2026). SlideKey (private education-focused slide authoring application). resources/slide_key.png</li>
-                <li>Sloman, A. (2026). Integrated Literacy Diagram (visual model image). resources/Pasted image 20260429100540.png</li>
-                <li>Sloman, A. (2026). Integrated Literacy Diagram (resource PDF). resources/Integrated Literacy Diagram.pdf</li>
-                <li>Holyoak, K. J., and Morrison, R. G. (Eds.). (2005). The Cambridge handbook of thinking and reasoning. Cambridge University Press.</li>
-                <li>Australian Bureau of Statistics. (2024). Occupation Standard Classification for Australia (OSCA). https://www.abs.gov.au/statistics/classifications/occupation-standard-classification-australia-osca</li>
-                <li>Hutton, J. S., Dudley, J., Horowitz-Kraus, T., DeWitt, T., and Holland, S. K. (2019). Associations between screen-based media use and brain white matter integrity in preschool-aged children. JAMA Pediatrics. https://jamanetwork.com/journals/jamapediatrics/fullarticle/2754101</li>
-                <li>Kosmyna, N., Hauptmann, E., Yuan, Y. T., Situ, J., Liao, X.-H., Beresnitzky, A. V., Braunstein, I., and Maes, P. (2025). Your brain on ChatGPT: Accumulation of cognitive debt when using an AI assistant for essay writing task. MIT Media Lab publication. https://www.media.mit.edu/publications/your-brain-on-chatgpt/</li>
-                <li>Sparrow, B., Liu, J., and Wegner, D. M. (2011). Google Effects on Memory: Cognitive Consequences of Having Information at Our Fingertips. Science. https://doi.org/10.1126/science.1207745</li>
-                <li>UNESCO. (2023). Guidance for generative AI in education and research. https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research</li>
-                <li>OECD. (2026). OECD Digital Education Outlook 2026. https://www.oecd.org/en/publications/oecd-digital-education-outlook-2026_062a7394-en.html</li>
-                <li>La Trobe University Library. APA 7 guide: Generative AI. https://latrobe.libguides.com/apa7/generativeai</li>
-                <li>Bosch-Bayard, J., Biscay, R. J., Fernandez, T., Otero, G. A., Ricardo-Garcell, J., Aubert-Vazquez, E., Evans, A. C., and Harmony, T. (2022). EEG effective connectivity during the first year of life mirrors brain synaptogenesis, myelination, and early right hemisphere predominance. NeuroImage, 252, 119035. https://pubmed.ncbi.nlm.nih.gov/35218932/</li>
-                <li>Bjork, R. A., and Bjork, E. L. (2020). Making things hard on yourself, but in a good way: Creating desirable difficulties to enhance learning. PDF. https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf</li>
-              </ol>
+              <div class="ref-card"><p class="ref-citation">Sloman, A. (2026). Cosmic Chronometer (interactive application). <a href="https://rexmortus.github.io/cosmic_chronometer/" target="_blank" rel="noopener">https://rexmortus.github.io/cosmic_chronometer/</a></p><span class="ref-note">Original interactive astronomy tool. Featured in the Cosmic Chronometer resource card.</span></div>
+              <div class="ref-card"><p class="ref-citation">Sloman, A. (2026). Galaxy Brain Infographic (classroom meme-format resource). resources/galaxy_brain.png</p><span class="ref-note">Meme-style diagram used to illustrate cognitive load concepts. Featured in the Infographic resource card.</span></div>
+              <div class="ref-card"><p class="ref-citation">Sloman, A. (2026). APA7 Challenge (gamification resource). <a href="https://alexsoloman173-lgtm.github.io/APA7-challange/" target="_blank" rel="noopener">https://alexsoloman173-lgtm.github.io/APA7-challange/</a></p><span class="ref-note">Web-based quiz game for teaching APA7 referencing. Featured in the Gamification resource card.</span></div>
+              <div class="ref-card"><p class="ref-citation">Sloman, A. (2026). APA7 Challenge screenshot (gamification resource image). resources/gamification.png</p><span class="ref-note">Screenshot of the APA7 Challenge game interface. Used as the preview image in the Gamification resource card.</span></div>
+              <div class="ref-card"><p class="ref-citation">YouTube thumbnail image used for The Oregon Trail. <a href="https://i.ytimg.com/vi/DwHee12Z_Dg/maxresdefault.jpg" target="_blank" rel="noopener">https://i.ytimg.com/vi/DwHee12Z_Dg/maxresdefault.jpg</a></p><span class="ref-note">Thumbnail sourced from YouTube for the Oregon Trail section. Used in the Gamification resource card gallery.</span></div>
+              <div class="ref-card"><p class="ref-citation">Reddit-hosted image used for Midnight Rescue. <a href="https://preview.redd.it/1hrjanf2yq811.jpg?auto=webp&amp;amp;s=6c3e02a84d2a6f370c0567dbc50929113f639dbe" target="_blank" rel="noopener">https://preview.redd.it/1hrjanf2yq811.jpg?auto=webp&amp;amp;s=6c3e02a84d2a6f370c0567dbc50929113f639dbe</a></p><span class="ref-note">Screenshot of Midnight Rescue sourced from Reddit. Used in the Gamification resource card gallery.</span></div>
+              <div class="ref-card"><p class="ref-citation">LaunchBox Games Database image used for Word Munchers. <a href="https://images.launchbox-app.com//449d681d-eab7-4a58-8619-f0f95e0c5693.png" target="_blank" rel="noopener">https://images.launchbox-app.com//449d681d-eab7-4a58-8619-f0f95e0c5693.png</a></p><span class="ref-note">Cover art sourced from LaunchBox. Used in the Gamification resource card gallery.</span></div>
+              <div class="ref-card"><p class="ref-citation">My Abandonware image used for Designasaurus II. <a href="https://www.myabandonware.com/media/screenshots/d/designasaurus-ii-vj/designasaurus-ii_7.png" target="_blank" rel="noopener">https://www.myabandonware.com/media/screenshots/d/designasaurus-ii-vj/designasaurus-ii_7.png</a></p><span class="ref-note">Screenshot sourced from My Abandonware. Used in the Gamification resource card gallery.</span></div>
+              <div class="ref-card"><p class="ref-citation">Sloman, A. (2026). Status Cards (classroom formative assessment resource, PDF). resources/status_cards.pdf</p><span class="ref-note">Printable card set for formative assessment check-ins. Featured in the Status Cards resource card.</span></div>
+              <div class="ref-card"><p class="ref-citation">Sloman, A. (2026). SlideKey (private education-focused slide authoring application). resources/slide_key.png</p><span class="ref-note">Screenshot of a private slide-authoring tool. Featured in the SlideKey resource card.</span></div>
+              <div class="ref-card"><p class="ref-citation">Sloman, A. (2026). Integrated Literacy Diagram (visual model image). resources/Pasted image 20260429100540.png</p><span class="ref-note">Visual model mapping literacy components. Used as the diagram image in the Integrated Literacy resource card.</span></div>
+              <div class="ref-card"><p class="ref-citation">Sloman, A. (2026). Integrated Literacy Diagram (resource PDF). resources/Integrated Literacy Diagram.pdf</p><span class="ref-note">Full-resolution PDF of the literacy model. Linked as the downloadable resource in the Integrated Literacy resource card.</span></div>
+              <div class="ref-card"><p class="ref-citation">Holyoak, K. J., and Morrison, R. G. (Eds.). (2005). The Cambridge handbook of thinking and reasoning. Cambridge University Press.</p><span class="ref-note">Foundational reference on human reasoning and cognition. Cited in the About section professional context.</span></div>
+              <div class="ref-card"><p class="ref-citation">Australian Bureau of Statistics. (2024). Occupation Standard Classification for Australia (OSCA). <a href="https://www.abs.gov.au/statistics/classifications/occupation-standard-classification-australia-osca" target="_blank" rel="noopener">https://www.abs.gov.au/statistics/classifications/occupation-standard-classification-australia-osca</a></p><span class="ref-note">Official occupational classification framework. Cited in the About section to contextualise the ICT Trainer role.</span></div>
+              <div class="ref-card"><p class="ref-citation">Hutton, J. S., Dudley, J., Horowitz-Kraus, T., DeWitt, T., and Holland, S. K. (2019). Associations between screen-based media use and brain white matter integrity in preschool-aged children. JAMA Pediatrics. <a href="https://jamanetwork.com/journals/jamapediatrics/fullarticle/2754101" target="_blank" rel="noopener">https://jamanetwork.com/journals/jamapediatrics/fullarticle/2754101</a></p><span class="ref-note">Peer-reviewed neuroscience study on screen exposure and brain development. Cited in the blog post on AI and learning.</span></div>
+              <div class="ref-card"><p class="ref-citation">Kosmyna, N., Hauptmann, E., Yuan, Y. T., Situ, J., Liao, X.-H., Beresnitzky, A. V., Braunstein, I., and Maes, P. (2025). Your brain on ChatGPT: Accumulation of cognitive debt when using an AI assistant for essay writing task. MIT Media Lab publication. <a href="https://www.media.mit.edu/publications/your-brain-on-chatgpt/" target="_blank" rel="noopener">https://www.media.mit.edu/publications/your-brain-on-chatgpt/</a></p><span class="ref-note">MIT study showing reduced neural engagement when AI handles writing. Cited in the blog post as primary evidence for cognitive offloading risks.</span></div>
+              <div class="ref-card"><p class="ref-citation">Sparrow, B., Liu, J., and Wegner, D. M. (2011). Google Effects on Memory: Cognitive Consequences of Having Information at Our Fingertips. Science. <a href="https://doi.org/10.1126/science.1207745" target="_blank" rel="noopener">https://doi.org/10.1126/science.1207745</a></p><span class="ref-note">Influential study on how search engine access changes memory encoding. Cited in the blog post discussion on transactive memory.</span></div>
+              <div class="ref-card"><p class="ref-citation">UNESCO. (2023). Guidance for generative AI in education and research. <a href="https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research" target="_blank" rel="noopener">https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research</a></p><span class="ref-note">Policy guidance on responsible AI use in educational contexts. Cited in the blog post as institutional framing.</span></div>
+              <div class="ref-card"><p class="ref-citation">OECD. (2026). OECD Digital Education Outlook 2026. <a href="https://www.oecd.org/en/publications/oecd-digital-education-outlook-2026_062a7394-en.html" target="_blank" rel="noopener">https://www.oecd.org/en/publications/oecd-digital-education-outlook-2026_062a7394-en.html</a></p><span class="ref-note">Global outlook report on digital education trends. Cited in the blog post for broader policy context.</span></div>
+              <div class="ref-card"><p class="ref-citation">La Trobe University Library. APA 7 guide: Generative AI. <a href="https://latrobe.libguides.com/apa7/generativeai" target="_blank" rel="noopener">https://latrobe.libguides.com/apa7/generativeai</a></p><span class="ref-note">University library guide for citing AI-generated content in APA7 format. Referenced for citation methodology throughout the portfolio.</span></div>
+              <div class="ref-card"><p class="ref-citation">Bosch-Bayard, J., Biscay, R. J., Fernandez, T., Otero, G. A., Ricardo-Garcell, J., Aubert-Vazquez, E., Evans, A. C., and Harmony, T. (2022). EEG effective connectivity during the first year of life mirrors brain synaptogenesis, myelination, and early right hemisphere predominance. NeuroImage, 252, 119035. <a href="https://pubmed.ncbi.nlm.nih.gov/35218932/" target="_blank" rel="noopener">https://pubmed.ncbi.nlm.nih.gov/35218932/</a></p><span class="ref-note">Neuroscience study on early brain connectivity development. Cited in the blog post to support claims about developmental neural plasticity.</span></div>
+              <div class="ref-card"><p class="ref-citation">Bjork, R. A., and Bjork, E. L. (2020). Making things hard on yourself, but in a good way: Creating desirable difficulties to enhance learning. PDF. <a href="https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf" target="_blank" rel="noopener">https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2021/01/RABjorkELBjorkJARMAC2020ForPostingSingleSpaced.pdf</a></p><span class="ref-note">Key paper on desirable difficulties as a learning strategy. Core citation in the blog post argument for preserving productive struggle.</span></div>
             <!-- END:references-list -->
           </div>
         </div>
@@ -1816,8 +1976,7 @@
 
       <article class="view" id="contact">
         <header class="page-head reveal section-head-light">
-          <div class="section-head-light-topline">
-            <span class="tag">Contact</span>
+          <div class="section-head-light-topline no-chip">
             <span class="section-head-light-note">Get in Touch</span>
           </div>
           <div class="section-head-light-titleblock">
@@ -1826,18 +1985,40 @@
           </div>
         </header>
         <div class="grid">
-          <div class="col-12 card reveal">
-            <h3>Contact Details</h3>
-            <p><strong>Personal:</strong> <a href="mailto:alecs@eml.cc">alecs@eml.cc</a></p>
-            <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/alec-sloman-2b294820/" target="_blank" rel="noreferrer">https://www.linkedin.com/in/alec-sloman-2b294820/</a></p>
+          <div class="col-8 card reveal">
+            <h3>Send a Message</h3>
+            <p>Use the form below to get in touch. Messages are sent directly to my email.</p>
+            <form class="contact-form" id="contactForm" novalidate>
+              <div class="contact-form-row">
+                <label>Name
+                  <input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+                </label>
+                <label>Email
+                  <input type="email" name="email" placeholder="your@email.com" required autocomplete="email" />
+                </label>
+              </div>
+              <label>Subject
+                <input type="text" name="subject" placeholder="What's this about?" />
+              </label>
+              <label>Message
+                <textarea name="message" placeholder="Your message..." required></textarea>
+              </label>
+              <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+                <button type="submit" class="contact-form-submit"><i data-lucide="send"></i> Send Message</button>
+                <span class="contact-form-status" id="contactFormStatus"></span>
+              </div>
+            </form>
           </div>
+          <aside class="col-4 card reveal">
+            <h3>Contact Details</h3>
+            <p><strong>Email:</strong> <a href="mailto:alecs@eml.cc">alecs@eml.cc</a></p>
+            <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/alec-sloman-2b294820/" target="_blank" rel="noreferrer">linkedin.com/in/alec-sloman-2b294820</a></p>
+          </aside>
         </div>
       </article>
     </section>
 
     <footer class="foot">
-      <span>Built as a single HTML SPA with embedded styles and scripts.</span>
-      <span>Swiss-inspired layout, responsive design, Lucide icon system.</span>
     </footer>
   </main>
 
@@ -1861,6 +2042,11 @@
       var links = Array.from(document.querySelectorAll('[data-route]'));
       var scrollHint = document.getElementById('scrollHint');
       var defaultPageTitle = document.title;
+      var blogPostTitle = document.getElementById('blogPostTitle');
+      var blogPostTag = document.getElementById('blogPostTag');
+      var blogPostWordCount = document.getElementById('blogPostWordCount');
+      var blogPostBody = document.getElementById('blogPostBody');
+      var blogPostSidebar = document.getElementById('blogPostSidebar');
       var resourceDetailTitle = document.getElementById('resourceDetailTitle');
       var resourceDetailSummary = document.getElementById('resourceDetailSummary');
       var resourceDetailBody = document.getElementById('resourceDetailBody');
@@ -1874,6 +2060,17 @@
         map[reflection.getAttribute('data-slug')] = reflection;
         return map;
       }, {});
+      var blogPosts = Array.from(document.querySelectorAll('.blog-hidden [data-blog-slug]')).reduce(function (map, post) {
+        map[post.getAttribute('data-blog-slug')] = post;
+        return map;
+      }, {});
+      var sectionBackgroundTints = {
+        about: '#d26f78',
+        blog: '#cf8a52',
+        resources: '#9ca95b',
+        references: '#6f9ecf',
+        contact: '#9877c8'
+      };
 
       function updateScrollHint() {
         if (!scrollHint) return;
@@ -1937,8 +2134,20 @@
         return 'resources/' + slug;
       }
 
+      function blogRoute(slug) {
+        return 'blog/' + slug;
+      }
+
       function routeFromHash() {
         var hash = (location.hash || '#about').slice(1);
+
+        if (hash.indexOf('blog/') === 0) {
+          var blogSlug = hash.slice('blog/'.length);
+          if (blogPosts[blogSlug]) {
+            return { view: 'blog-post', slug: blogSlug };
+          }
+          return { view: 'blog' };
+        }
 
         if (hash.indexOf('resources/') === 0) {
           var slug = hash.slice('resources/'.length);
@@ -1949,6 +2158,62 @@
         }
 
         return views.some(function (v) { return v.id === hash; }) ? { view: hash } : { view: 'about' };
+      }
+
+      function renderBlogPost(slug) {
+        var post = blogPosts[slug];
+        if (!post || !blogPostBody || !blogPostSidebar) return;
+
+        var title = post.getAttribute('data-title') || 'Blog post';
+        var tag = post.getAttribute('data-tag') || 'Post';
+        var summary = post.getAttribute('data-summary') || '';
+        var wordCountId = post.getAttribute('data-word-count-id');
+        var countSpan = wordCountId ? document.getElementById(wordCountId) : null;
+        var author = post.getAttribute('data-author') || '';
+        var date = post.getAttribute('data-date') || '';
+        var downloadTag = post.getAttribute('data-download-tag') || 'Download';
+        var downloadImage = post.getAttribute('data-download-image') || '';
+        var downloadAlt = post.getAttribute('data-download-alt') || 'Blog download thumbnail';
+        var downloadCopy = post.getAttribute('data-download-copy') || '';
+        var downloadFile = post.getAttribute('data-download-file') || '';
+        var downloadLabel = post.getAttribute('data-download-label') || 'Download PDF';
+        var content = post.querySelector('.blog-post-content');
+
+        blogPostTitle.textContent = title;
+        blogPostTag.textContent = tag;
+        blogPostWordCount.textContent = countSpan ? countSpan.textContent : '0 words';
+        blogPostBody.innerHTML = content ? content.innerHTML : '';
+
+        var meta = [];
+        meta.push('<p><strong>Category:</strong> ' + tag + '</p>');
+        if (author) {
+          meta.push('<p><strong>Author:</strong> ' + author + '</p>');
+        }
+        if (date) {
+          meta.push('<p><strong>Date:</strong> ' + date + '</p>');
+        }
+        if (summary) {
+          meta.push('<p><strong>Summary:</strong> ' + summary + '</p>');
+        }
+        meta.push('<p><strong>Reading Time:</strong> ' + (countSpan ? countSpan.textContent : '0 words') + '</p>');
+        if (downloadFile) {
+          meta.push('<span class="tag">' + downloadTag + '</span>');
+          if (downloadImage) {
+            meta.push('<img class="blog-download-thumb" src="' + downloadImage + '" alt="' + downloadAlt + '" loading="lazy" />');
+          }
+          if (downloadCopy) {
+            meta.push('<p class="blog-download-copy">' + downloadCopy + '</p>');
+          }
+          meta.push('<a class="blog-download-link" href="' + downloadFile + '" download><i data-lucide="file-down"></i> ' + downloadLabel + '</a>');
+        }
+
+        blogPostSidebar.innerHTML = meta.join('');
+        bindLightboxTargets(blogPostBody);
+        applyPretextLayout();
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons({ attrs: { width: 17, height: 17, strokeWidth: 1.8 } });
+        }
+        document.title = title + ' | Professional Portfolio | EDU1003 AT3';
       }
 
       function buildResourceSidebar(reflection) {
@@ -2082,7 +2347,9 @@
       }
 
       function activate(route) {
-        if (route.view === 'resource-detail') {
+        if (route.view === 'blog-post') {
+          renderBlogPost(route.slug);
+        } else if (route.view === 'resource-detail') {
           renderResourceDetail(route.slug);
         } else {
           document.title = defaultPageTitle;
@@ -2092,10 +2359,14 @@
           view.classList.toggle('active', view.id === route.view);
         });
 
-        var activeRoute = route.view === 'resource-detail' ? 'resources' : route.view;
+        var activeRoute = (route.view === 'resource-detail')
+          ? 'resources'
+          : (route.view === 'blog-post' ? 'blog' : route.view);
         links.forEach(function (link) {
           link.classList.toggle('active', link.dataset.route === activeRoute);
         });
+
+        document.body.style.setProperty('--active-bg-tint', sectionBackgroundTints[activeRoute] || '#d26f78');
 
         if (activeRoute === 'resources') {
           setupMasonryGrid();
@@ -2132,6 +2403,29 @@
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               openResourcePage();
+            }
+          });
+        });
+      }
+
+      function setupBlogRoutes() {
+        Array.from(document.querySelectorAll('.blog-index-item[data-blog-slug]')).forEach(function (card) {
+          function openBlogPost() {
+            var slug = card.getAttribute('data-blog-slug');
+            if (!slug) return;
+            location.hash = '#' + blogRoute(slug);
+          }
+
+          card.addEventListener('click', function (e) {
+            if (e.target.closest('a')) return;
+            openBlogPost();
+          });
+
+          card.addEventListener('keydown', function (e) {
+            if (e.target.closest('a')) return;
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openBlogPost();
             }
           });
         });
@@ -2254,6 +2548,7 @@
       activate(routeFromHash());
       setupReveal();
       setupLightbox();
+      setupBlogRoutes();
       setupResourceRoutes();
       updateScrollHint();
 
@@ -2277,6 +2572,29 @@
             window.lucide.createIcons({ attrs: { width: 17, height: 17, strokeWidth: 1.8 } });
           }
         }, 500);
+      }
+
+      // Contact form — mailto fallback
+      var contactForm = document.getElementById('contactForm');
+      var contactFormStatus = document.getElementById('contactFormStatus');
+      if (contactForm) {
+        contactForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var name    = (contactForm.elements['name'].value || '').trim();
+          var email   = (contactForm.elements['email'].value || '').trim();
+          var subject = (contactForm.elements['subject'].value || '').trim();
+          var message = (contactForm.elements['message'].value || '').trim();
+          if (!name || !email || !message) {
+            contactFormStatus.textContent = 'Please fill in name, email, and message.';
+            contactFormStatus.style.display = 'block';
+            return;
+          }
+          var body = encodeURIComponent('From: ' + name + ' <' + email + '>\n\n' + message);
+          var sub  = encodeURIComponent(subject || 'Portfolio contact');
+          window.location.href = 'mailto:alecs@eml.cc?subject=' + sub + '&body=' + body;
+          contactFormStatus.textContent = 'Opening your mail client…';
+          contactFormStatus.style.display = 'block';
+        });
       }
     })();
   </script>

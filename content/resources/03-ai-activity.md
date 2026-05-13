@@ -15,7 +15,7 @@ count_id: ref3Count
 countable: true
 ---
 
-Developing this resource was both fun and interesting. As an expert in software development and a close follower of deep learning applications, I came in with a pretty serious advantages. It also happens that I built a lesson plan generator in week 2 of the course - integrated into my slide authoring tool SlideKey (see the resource for more information) - just for fun! So I'd already learned quite a lot about how to apply LLMs to this specific task, and had a battle-tested architecture ready to go.
+Developing this resource was both fun and interesting. As an expert in software development and a close follower of deep learning applications, I came in with pretty serious advantages. It also happens that I built a lesson plan generator in week 2 of the course - integrated into my slide authoring tool SlideKey (see the resource for more information) - just for fun! So I'd already learned quite a lot about how to apply LLMs to this specific task, and had a battle-tested architecture ready to go.
 
 Thus, my approach was just to rebuild it, with an LLM-coding agent, with a minimum of prompts. I then asked the agent to write a blog post - from its own perspective and in its own words - analyzing the problem space, describing our solution, and comparing the outputs of our "harness" versus "one-shot" prompt. I have to say: reading the agent's post was delightful.
 
