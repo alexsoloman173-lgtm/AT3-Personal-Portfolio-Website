@@ -7,11 +7,11 @@ icon: book-open
 summary: PbtA-inspired teaching playbook for reflecting on classroom decisions.
 image: resources/teachers_and_dragons_thumbnail.png
 image_alt: Placeholder image for the Teachers and Dragons resource
-link_url: resources/Preview%20%E2%80%94%20Teachers%20and%20Dragons.pdf
+link_url: resources/teachers-and-dragons-a5–preview.pdf
 link_text: Download PDF ->
 link_download: true
 media_image: resources/teachers_and_dragons_thumbnail.png
-media_download: resources/Preview%20%E2%80%94%20Teachers%20and%20Dragons.pdf
+media_download: resources/teachers-and-dragons-a5–preview.pdf
 media_download_name: Teachers and Dragons PDF
 card_class: tall
 extra: true
